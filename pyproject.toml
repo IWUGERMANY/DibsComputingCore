@@ -1,0 +1,38 @@
+[project]
+name = "dibs_computing_core"
+version = "1.0.0"
+description = "DIBS---Dynamic-ISO-Building-Simulator is a simulation program for calculating the space heating, occupancy hot water, cooling and electricity demand of German non-residential buildings. Further the DIBS calculates the heating value based energy uses, the primary energy and the greenhouse gas emission based on the defined factors of the German building energy ordinance (Gebäudeenergiegesetz). The underlying resistance-capacity-model is based on the simplified hourly method of ISO 13790:2008."
+readme = "README.md"
+requires-python = ">=3.10.0"
+license = { file = "LICENSE" }
+authors = [
+    { name = "Julian Bischof", email = "j.bischof@iwu.de" },
+    { name = "Simon Knoll" },
+    { name = "Michael Hörner" },
+    { name = "Wail Samjouni", email = "w.samjouni@iwu.de" },
+    { name = "André Müller", email = "a.mueller@iwu.de" },
+    { name = "Jens Calisti", email = "j.calisti@iwu.de" },
+]
+keywords = ["Building", "Building-Stock", "Non-Domestic", "Non-Residential", "Operational", "Energy", "Greenhouse Gas", "Global Warming Potential", "Simulation", "Model", "Germany", "ISO 13790", "5R1C"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Programming Language :: Python"
+]
+
+[tool.pytest.ini_options]
+pythonpath = [
+    "src",
+]
+
+addopts = [
+    "--import-mode=importlib",
+]
+
+[project.urls]
+Homepage = "https://github.com/IWUGERMANY/DIBS---Dynamic-ISO-Building-Simulator/tree/master"
+Documentation = "https://github.com/IWUGERMANY/DIBS---Dynamic-ISO-Building-Simulator/blob/master/doc/DIBS_documentation.pdf"
+Repository = "https://github.com/IWUGERMANY/DibsComputingCore"
+
+[tool.black]
+line-length = 88
+target-version = ['py310']
