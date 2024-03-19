@@ -74,7 +74,6 @@ class DIBS:
         user_args = self.get_user_args()
 
         self.datasource.building = user_buildings[index]
-        print(self.datasource.building.plz)
         self.datasource.get_epw_file()
 
         simulator = BuildingSimulator(self.datasource)
