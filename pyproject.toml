@@ -37,10 +37,10 @@ Repository = "https://github.com/IWUGERMANY/DibsComputingCore"
 line-length = 88
 target-version = ['py310']
 
-[build-system]
-requires = ["flit_core >=2"]
-build-backend = "flit_core.buildapi"
-
 #[build-system]
-#requires = ["flit"]
-#build-backend = "flit.api"
+#requires = ["flit_core >=2"]
+#build-backend = "flit_core.buildapi"
+
+[build-system]
+requires = ["flit"]
+build-backend = "flit.api"
