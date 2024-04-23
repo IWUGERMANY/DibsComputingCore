@@ -44,7 +44,9 @@ For a detailed installation guide and further information on DIBS see the [wiki]
 
 import dibs-computing-core
 
-The Dynamic ISO Building Simulator has been developed in context of the 'ENOB:DataNWG Forschungsdatenbank Nichtwohngebäude' (www.datanwg.de) project and the project 'FlexGeber - Demonstration of flexibility options in the building sector and their integration with the energy system in Germany' at Institut Wohnen und Umwelt (IWU), Darmstadt.
+## Acknowledgement
+
+The Dynamic ISO Building Simulator has been developed in context of the 'ENOB:DataNWG Forschungsdatenbank Nichtwohngebäude' (www.datanwg.de) project and the project 'FlexGeber - Demonstration of flexibility options in the building sector and their integration with the energy system in Germany' at Institut Wohnen und Umwelt (IWU), Darmstadt. The preparation as the publication as a Python package on Pypi was undertaken within the EnOB:LezBAU projekt, where the DIBS model provides the basis for the calculation of the operational energy within the LezBAU web tool.
 <p float="left">
   <img src="src/img/IWU_Logo.PNG" width="15%" /> 
 </p>  
