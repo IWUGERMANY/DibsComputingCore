@@ -14,7 +14,7 @@ To install the package, use the following command:
 pip install dibs_computing_core==1.0.0
 ```
 
-To use the full DIBS [model](https://iwugermany.github.io/dibs/overview)) it is recomended to install the [DibsCLI](https://github.com/IWUGERMANY/DibsCLI) bundling the DibsComputingCore, [DibsDataSourceCSV](https://github.com/IWUGERMANY/DibsDataSourceCSV) and the [DibsData](https://github.com/IWUGERMANY/DibsData). To install the DIBS Command Line Interface (DibsCLI) use the following command:
+To use the full DIBS [model](https://iwugermany.github.io/dibs/overview) it is recomended to install the [DibsCLI](https://github.com/IWUGERMANY/DibsCLI) bundling the DibsComputingCore, [DibsDataSourceCSV](https://github.com/IWUGERMANY/DibsDataSourceCSV) and the [DibsData](https://github.com/IWUGERMANY/DibsData). To install the DIBS Command Line Interface (DibsCLI) use the following command:
 
 ```bash
 pip install dibs_cli
