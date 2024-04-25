@@ -14,9 +14,15 @@ To install the package, use the following command:
 pip install dibs_computing_core==1.0.0
 ```
 
+To use the full DIBS [model](https://iwugermany.github.io/dibs/overview)) it is recomended to install the [DibsCLI](https://github.com/IWUGERMANY/DibsCLI) bundling the DibsComputingCore, [DibsDataSourceCSV](https://github.com/IWUGERMANY/DibsDataSourceCSV) and the [DibsData](https://github.com/IWUGERMANY/DibsData). To install the DIBS Command Line Interface (DibsCLI) use the following command:
+
+```bash
+pip install dibs_cli
+```
+
 ## Further information
 
-For a detailed installation guide and further information on DIBS see the [wiki](https://github.com/IWUGERMANY/DibsCLI/wiki)
+For a detailed installation guide and further information on DIBS see the [wiki](https://github.com/IWUGERMANY/DibsCLI/wiki) and the [DIBS Project Page](https://iwugermany.github.io/dibs/).
 
 ## References
 - DIN EN ISO 13790:2008-09. Energieeffizienz von Gebäuden - Berechnung des Energiebedarfs für Heizung und Kühlung (ISO 13790:2008). Berlin: Beuth Verlag.
@@ -40,10 +46,32 @@ For a detailed installation guide and further information on DIBS see the [wiki]
 
 ---
 
+## How to cite
+
+Please cite the Dynamic ISO Building Simulator (DIBS) as defined [here](https://iwugermany.github.io/dibs/contri).
+
+---
+
+## Legacy
+
+The current Dynamic ISO Building Simulator (DIBS) is a PyPI package implementation of the initial [DIBS implementation](https://github.com/IWUGERMANY/DIBS---Dynamic-ISO-Building-Simulator) by Julian Bischof, Simon Knoll and Michael Hörner.
+
+
+---
+
 ## Usage
 
 import dibs-computing-core
 
+
+---
+## License
+
+This repository is licensed under the [MIT License](LICENSE). Feel free to use, modify, and distribute the code as per
+the terms of this license.
+
+
+---
 ## Acknowledgement
 
 The Dynamic ISO Building Simulator has been developed in context of the 'ENOB:DataNWG Forschungsdatenbank Nichtwohngebäude' (www.datanwg.de) project and the project 'FlexGeber - Demonstration of flexibility options in the building sector and their integration with the energy system in Germany' at Institut Wohnen und Umwelt (IWU), Darmstadt. The preparation as the publication as a Python package on Pypi was undertaken within the EnOB:LezBAU projekt, where the DIBS model provides the basis for the calculation of the operational energy within the LezBAU web tool.
