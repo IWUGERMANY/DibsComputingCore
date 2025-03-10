@@ -29,8 +29,8 @@ addopts = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/IWUGERMANY/DIBS---Dynamic-ISO-Building-Simulator/tree/master"
-Documentation = "https://github.com/IWUGERMANY/DIBS---Dynamic-ISO-Building-Simulator/blob/master/doc/DIBS_documentation.pdf"
+Homepage = "https://github.com/IWUGERMANY/DibsComputingCore/tree/main"
+Documentation = "https://github.com/IWUGERMANY/DibsComputingCore/blob/main/src/DibsDocumentation.pdf"
 Repository = "https://github.com/IWUGERMANY/DibsComputingCore"
 
 [tool.black]
@@ -40,7 +40,3 @@ target-version = ['py310']
 [build-system]
 requires = ["flit_core >=2"]
 build-backend = "flit_core.buildapi"
-
-#[build-system]
-#requires = ["flit"]
-#build-backend = "flit.api"

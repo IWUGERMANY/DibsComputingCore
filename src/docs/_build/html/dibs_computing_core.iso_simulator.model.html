@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>dibs_computing_core.iso_simulator.model package &mdash; Dibs Documentation 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=8d563738"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="dibs_computing_core.iso_simulator.exceptions package" href="dibs_computing_core.iso_simulator.exceptions.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Dibs Documentation
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">src</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="dibs_computing_core.html">dibs_computing_core package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="dibs_computing_core.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="dibs_computing_core.iso_simulator.html">dibs_computing_core.iso_simulator package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="dibs_computing_core.html#module-dibs_computing_core">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Dibs Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">src</a></li>
+          <li class="breadcrumb-item"><a href="dibs_computing_core.html">dibs_computing_core package</a></li>
+          <li class="breadcrumb-item"><a href="dibs_computing_core.iso_simulator.html">dibs_computing_core.iso_simulator package</a></li>
+      <li class="breadcrumb-item active">dibs_computing_core.iso_simulator.model package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/dibs_computing_core.iso_simulator.model.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="dibs-computing-core-iso-simulator-model-package">
+<h1>dibs_computing_core.iso_simulator.model package<a class="headerlink" href="#dibs-computing-core-iso-simulator-model-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-dibs_computing_core.iso_simulator.model.ResultOutput">
+<span id="dibs-computing-core-iso-simulator-model-resultoutput-module"></span><h2>dibs_computing_core.iso_simulator.model.ResultOutput module<a class="headerlink" href="#module-dibs_computing_core.iso_simulator.model.ResultOutput" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="dibs_computing_core.iso_simulator.model.ResultOutput.ResultOutput">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dibs_computing_core.iso_simulator.model.ResultOutput.</span></span><span class="sig-name descname"><span class="pre">ResultOutput</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">building</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#dibs_computing_core.iso_simulator.model.building.Building" title="dibs_computing_core.iso_simulator.model.building.Building"><span class="pre">Building</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">sum_object</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#dibs_computing_core.iso_simulator.model.calculations_sum.CalculationOfSum" title="dibs_computing_core.iso_simulator.model.calculations_sum.CalculationOfSum"><span class="pre">CalculationOfSum</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">heating_sys_hi_sum</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">heating_sys_electricity_hi_sum</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">heating_sys_fossils_hi_sum</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">heating_sys_carbon_sum</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">heating_sys_pe_sum</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cooling_sys_carbon_sum</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cooling_sys_pe_sum</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hot_water_energy_hi_sum</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">heating_fuel_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">heating_f_ghg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">heating_f_pe</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">heating_f_hs_hi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hot_water_fuel_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hot_water_f_ghg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hot_water_f_pe</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hot_water_f_hs_hi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cooling_fuel_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cooling_f_ghg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cooling_f_pe</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cooling_f_hs_hi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">light_appl_fuel_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">light_appl_f_ghg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">light_appl_f_pe</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">light_appl_f_hs_hi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hot_water_sys_carbon_sum</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hot_water_sys_pe_sum</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lighting_demand_carbon_sum</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lighting_demand_pe_sum</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">appliance_gains_demand_carbon_sum</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">appliance_gains_demand_pe_sum</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">carbon_sum</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pe_sum</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fe_hi_sum</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schedule_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">typ_norm</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epw_filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dibs_computing_core.iso_simulator.model.ResultOutput.ResultOutput" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="dibs_computing_core.iso_simulator.model.ResultOutput.ResultOutput.calc_appliance_gains_demand_gwp">
+<span class="sig-name descname"><span class="pre">calc_appliance_gains_demand_gwp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dibs_computing_core.iso_simulator.model.ResultOutput.ResultOutput.calc_appliance_gains_demand_gwp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dibs_computing_core.iso_simulator.model.ResultOutput.ResultOutput.calc_appliance_gains_demand_pe">
+<span class="sig-name descname"><span class="pre">calc_appliance_gains_demand_pe</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dibs_computing_core.iso_simulator.model.ResultOutput.ResultOutput.calc_appliance_gains_demand_pe" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dibs_computing_core.iso_simulator.model.ResultOutput.ResultOutput.calc_cooling_demand">
+<span class="sig-name descname"><span class="pre">calc_cooling_demand</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dibs_computing_core.iso_simulator.model.ResultOutput.ResultOutput.calc_cooling_demand" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dibs_computing_core.iso_simulator.model.ResultOutput.ResultOutput.calc_cooling_energy">
+<span class="sig-name descname"><span class="pre">calc_cooling_energy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dibs_computing_core.iso_simulator.model.ResultOutput.ResultOutput.calc_cooling_energy" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dibs_computing_core.iso_simulator.model.ResultOutput.ResultOutput.calc_cooling_sys_electricity">
+<span class="sig-name descname"><span class="pre">calc_cooling_sys_electricity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dibs_computing_core.iso_simulator.model.ResultOutput.ResultOutput.calc_cooling_sys_electricity" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dibs_computing_core.iso_simulator.model.ResultOutput.ResultOutput.calc_cooling_sys_fossils">
+<span class="sig-name descname"><span class="pre">calc_cooling_sys_fossils</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dibs_computing_core.iso_simulator.model.ResultOutput.ResultOutput.calc_cooling_sys_fossils" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dibs_computing_core.iso_simulator.model.ResultOutput.ResultOutput.calc_cooling_sys_gwp">
+<span class="sig-name descname"><span class="pre">calc_cooling_sys_gwp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dibs_computing_core.iso_simulator.model.ResultOutput.ResultOutput.calc_cooling_sys_gwp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dibs_computing_core.iso_simulator.model.ResultOutput.ResultOutput.calc_cooling_sys_pe">
+<span class="sig-name descname"><span class="pre">calc_cooling_sys_pe</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dibs_computing_core.iso_simulator.model.ResultOutput.ResultOutput.calc_cooling_sys_pe" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dibs_computing_core.iso_simulator.model.ResultOutput.ResultOutput.calc_electricity_demand_total">
+<span class="sig-name descname"><span class="pre">calc_electricity_demand_total</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dibs_computing_core.iso_simulator.model.ResultOutput.ResultOutput.calc_electricity_demand_total" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dibs_computing_core.iso_simulator.model.ResultOutput.ResultOutput.calc_electricity_demand_total_ref">
+<span class="sig-name descname"><span class="pre">calc_electricity_demand_total_ref</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dibs_computing_core.iso_simulator.model.ResultOutput.ResultOutput.calc_electricity_demand_total_ref" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dibs_computing_core.iso_simulator.model.ResultOutput.ResultOutput.calc_fossils_demand_total">
+<span class="sig-name descname"><span class="pre">calc_fossils_demand_total</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dibs_computing_core.iso_simulator.model.ResultOutput.ResultOutput.calc_fossils_demand_total" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dibs_computing_core.iso_simulator.model.ResultOutput.ResultOutput.calc_fossils_demand_total_ref">
+<span class="sig-name descname"><span class="pre">calc_fossils_demand_total_ref</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dibs_computing_core.iso_simulator.model.ResultOutput.ResultOutput.calc_fossils_demand_total_ref" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dibs_computing_core.iso_simulator.model.ResultOutput.ResultOutput.calc_gwp">
+<span class="sig-name descname"><span class="pre">calc_gwp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dibs_computing_core.iso_simulator.model.ResultOutput.ResultOutput.calc_gwp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dibs_computing_core.iso_simulator.model.ResultOutput.ResultOutput.calc_heating_demand">
+<span class="sig-name descname"><span class="pre">calc_heating_demand</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dibs_computing_core.iso_simulator.model.ResultOutput.ResultOutput.calc_heating_demand" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dibs_computing_core.iso_simulator.model.ResultOutput.ResultOutput.calc_heating_energy">
+<span class="sig-name descname"><span class="pre">calc_heating_energy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dibs_computing_core.iso_simulator.model.ResultOutput.ResultOutput.calc_heating_energy" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dibs_computing_core.iso_simulator.model.ResultOutput.ResultOutput.calc_heating_sys_electricity">
+<span class="sig-name descname"><span class="pre">calc_heating_sys_electricity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dibs_computing_core.iso_simulator.model.ResultOutput.ResultOutput.calc_heating_sys_electricity" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dibs_computing_core.iso_simulator.model.ResultOutput.ResultOutput.calc_heating_sys_fossils">
+<span class="sig-name descname"><span class="pre">calc_heating_sys_fossils</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dibs_computing_core.iso_simulator.model.ResultOutput.ResultOutput.calc_heating_sys_fossils" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dibs_computing_core.iso_simulator.model.ResultOutput.ResultOutput.calc_heating_sys_gwp">
+<span class="sig-name descname"><span class="pre">calc_heating_sys_gwp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dibs_computing_core.iso_simulator.model.ResultOutput.ResultOutput.calc_heating_sys_gwp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dibs_computing_core.iso_simulator.model.ResultOutput.ResultOutput.calc_heating_sys_pe">
+<span class="sig-name descname"><span class="pre">calc_heating_sys_pe</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dibs_computing_core.iso_simulator.model.ResultOutput.ResultOutput.calc_heating_sys_pe" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dibs_computing_core.iso_simulator.model.ResultOutput.ResultOutput.calc_hot_water_demand">
+<span class="sig-name descname"><span class="pre">calc_hot_water_demand</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dibs_computing_core.iso_simulator.model.ResultOutput.ResultOutput.calc_hot_water_demand" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dibs_computing_core.iso_simulator.model.ResultOutput.ResultOutput.calc_hot_water_energy">
+<span class="sig-name descname"><span class="pre">calc_hot_water_energy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dibs_computing_core.iso_simulator.model.ResultOutput.ResultOutput.calc_hot_water_energy" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dibs_computing_core.iso_simulator.model.ResultOutput.ResultOutput.calc_hot_water_sys_gwp">
+<span class="sig-name descname"><span class="pre">calc_hot_water_sys_gwp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dibs_computing_core.iso_simulator.model.ResultOutput.ResultOutput.calc_hot_water_sys_gwp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dibs_computing_core.iso_simulator.model.ResultOutput.ResultOutput.calc_hot_water_sys_pe">
+<span class="sig-name descname"><span class="pre">calc_hot_water_sys_pe</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dibs_computing_core.iso_simulator.model.ResultOutput.ResultOutput.calc_hot_water_sys_pe" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dibs_computing_core.iso_simulator.model.ResultOutput.ResultOutput.calc_lighting_demand_gwp">
+<span class="sig-name descname"><span class="pre">calc_lighting_demand_gwp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dibs_computing_core.iso_simulator.model.ResultOutput.ResultOutput.calc_lighting_demand_gwp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dibs_computing_core.iso_simulator.model.ResultOutput.ResultOutput.calc_lighting_demand_pe">
+<span class="sig-name descname"><span class="pre">calc_lighting_demand_pe</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dibs_computing_core.iso_simulator.model.ResultOutput.ResultOutput.calc_lighting_demand_pe" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dibs_computing_core.iso_simulator.model.ResultOutput.ResultOutput.calc_pe">
+<span class="sig-name descname"><span class="pre">calc_pe</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#dibs_computing_core.iso_simulator.model.ResultOutput.ResultOutput.calc_pe" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-dibs_computing_core.iso_simulator.model.building">
+<span id="dibs-computing-core-iso-simulator-model-building-module"></span><h2>dibs_computing_core.iso_simulator.model.building module<a class="headerlink" href="#module-dibs_computing_core.iso_simulator.model.building" title="Link to this heading"></a></h2>
+<p>Physics required to calculate sensible space heating and space cooling loads, and space lighting loads (DIN EN ISO 13970:2008)</p>
+<p>The equations presented here is this code are derived from ISO 13790 Annex C, Methods are listed in order of apperance in the Annex</p>
+<p>Portions of this software are copyright of their respective authors and released under the MIT license:
+RC_BuildingSimulator, Copyright 2016 Architecture and Building Systems, ETH Zurich</p>
+<p>author: “Julian Bischof, Simon Knoll, Michael Hörner ”
+copyright: “Copyright 2023, Institut Wohnen und Umwelt”
+license: “MIT”</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="dibs_computing_core.iso_simulator.model.building.Building">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dibs_computing_core.iso_simulator.model.building.</span></span><span class="sig-name descname"><span class="pre">Building</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scr_gebaeude_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plz</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hk_geb</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uk_geb</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_occupancy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wall_area_og</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wall_area_ug</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_area_north</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_area_east</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_area_south</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_area_west</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">roof_area</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">net_room_area</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">energy_ref_area</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_area</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gross_base_area</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">building_height</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">net_volume</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gross_volume</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">envelope_area</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lighting_load</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lighting_control</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lighting_utilisation_factor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lighting_maintenance_factor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aw_construction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shading_device</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shading_solar_transmittance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">glass_solar_transmittance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">glass_solar_shading_transmittance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">glass_light_transmittance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u_windows</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u_walls</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u_roof</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u_base</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temp_adj_base</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temp_adj_walls_ug</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ach_inf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ach_win</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ach_vent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">heat_recovery_efficiency</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thermal_capacitance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_set_heating</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_start</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_set_cooling</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">night_flushing_flow</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_heating_energy_per_floor_area</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_cooling_energy_per_floor_area</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">heating_supply_system</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cooling_supply_system</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">heating_emission_system</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cooling_emission_system</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dhw_system</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dibs_computing_core.iso_simulator.model.building.Building" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Sets the parameters of the building.</p>
+<p>INPUT PARAMETER DEFINITION
+scr_gebaeude_id: Building Screening-ID
+plz: Zipcode of building location
+hk_geb: Usage type (main category)
+uk_geb: Usage type (subcategory)
+max_occupancy: Max. number of persons
+wall_area_og: Area of all walls above ground in contact with the outside [m2]
+wall_area_ug: Area of all walls below ground in contact with soil [m2]
+window_area_north: Area of the glazed surface in contact with the outside facing north [m2]
+window_area_east: Area of the glazed surface in contact with the outside facing east [m2]
+window_area_south: Area of the glazed surface in contact with the outside facing south [m2]
+window_area_west: Area of the glazed surface in contact with the outside facing west [m2]
+roof_area: Area of the roof in contact with the outside [m2]
+net_room_area: Area of all floor areas from usable rooms including all floor plan levels of the building (Refers to “Netto-Raumfläche”, DIN 277-1:2016-01)
+base_area: Area for the calculation of transmission heat losses to the soil. Also used to calculate the building’s volume.
+energy_ref_area: Energy reference area of the building
+building_height: Mean height of the building [m]
+lighting_load: Lighting Load [W/m2]
+lighting_control: Lux threshold at which the lights turn on [Lx]
+lighting_utilisation_factor: A factor that determines how much natural solar lumminace is effectively utilised in the space
+lighting_maintenance_factor: A factor based on how dirty the windows area
+glass_solar_transmittance: Solar radiation passing through the window (g-value)
+glass_solar_shading_transmittance: Solar radiation passing through the window with active shading devices
+glass_light_transmittance: Solar illuminance passing through the window
+u_windows: U value of glazed surfaces [W/m2K]
+u_walls: U value of external walls  [W/m2K]
+u_roof: U value of the roof [W/m2K]
+u_base: U value of the floor [W/m2K]
+temp_adj_base: Temperature adjustment factor for the floor
+temp_adj_walls_ug: Temperature adjustment factor for walls below ground
+ach_inf: Air changes per hour through infiltration [Air Changes Per Hour]
+ach_win: Air changes per hour through opened windows [Air Changes Per Hour]
+ach_vent: Air changes per hour through ventilation [Air Changes Per Hour]
+ventilation_efficiency: Efficiency of the heat recovery system for ventilation. Set to 0 if there is no heat recovery
+night_flushing_flow: Air changes per hour through night flushing [Air Changes Per Hour]
+thermal_capacitance: Thermal capacitance of the building [J/m2K]
+t_set_heating : Thermal heating set point [C]
+t_set_cooling: Thermal cooling set point [C]
+max_cooling_energy_per_floor_area: Maximum cooling load. Set to -np.inf for unrestricted cooling [C]
+max_heating_energy_per_floor_area: Maximum heating load per floor area. Set to no.inf for unrestricted heating [C]
+heating_supply_system: The type of heating system
+cooling_supply_system: The type of cooling system
+heating_emission_system: How the heat is distributed to the building
+cooling_emission_system: How the cooling energy is distributed to the building</p>
+<p>VARIABLE DEFINITION</p>
+<p>internal_gains: Internal Heat Gains [W]
+solar_gains: Solar Heat Gains after transmitting through the window [W]
+t_out: Outdoor air temperature [C]
+t_m_prev: Thermal mass temperature from the previous time step
+ill: Illuminance transmitting through the window [lumen]
+occupancy: Occupancy [people]</p>
+<p>t_m_next: Medium temperature of the next time step [C]
+t_m: Average between the previous and current time-step of the bulk temperature [C]</p>
+<p>Inputs to the 5R1C model:
+c_m: Thermal Capacitance of the medium [J/K]
+h_tr_is: Conductance between the air node and the inside surface node [W/K]
+h_tr_w: Heat transfer coefficient from the outside through windows, doors [W/K]
+h_tr_op: Heat transfer coefficient from the outside through opaque elements [W/K]
+h_tr_em: Conductance between outside node and mass node [W/K]
+h_tr_ms: Conductance between mass node and internal surface node [W/K]
+h_ve_adj: Ventilation heat transmission coefficient [W/K]</p>
+<p>phi_m_tot: see formula for the calculation, eq C.5 in standard [W]
+phi_m: Combination of internal and solar gains directly to the medium [W]
+phi_st: combination of internal and solar gains directly to the internal surface [W]
+phi_ia: combination of internal and solar gains to the air [W]
+energy_demand: Heating and Cooling of the Supply air [W]</p>
+<p>h_tr_1: combined heat conductance, see function for definition [W/K]
+h_tr_2: combined heat conductance, see function for definition [W/K]
+h_tr_3: combined heat conductance, see function for definition [W/K]</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="dibs_computing_core.iso_simulator.model.building.Building.calc_energy_demand">
+<span class="sig-name descname"><span class="pre">calc_energy_demand</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">internal_gains</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solar_gains</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_out</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_m_prev</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dibs_computing_core.iso_simulator.model.building.Building.calc_energy_demand" title="Link to this definition"></a></dt>
+<dd><p>Calculates the energy demand of the space if heating/cooling is active
+Used in: solve_building_energy()
+# Step 1 - Step 4 in Section C.4.2 in [C.3 ISO 13790]</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dibs_computing_core.iso_simulator.model.building.Building.calc_energy_demand_unrestricted">
+<span class="sig-name descname"><span class="pre">calc_energy_demand_unrestricted</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">energy_floorAx10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_air_set</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_air_0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_air_10</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dibs_computing_core.iso_simulator.model.building.Building.calc_energy_demand_unrestricted" title="Link to this definition"></a></dt>
+<dd><p>Calculates the energy demand of the system if it has no maximum output restrictions
+# (C.13) in [C.3 ISO 13790]</p>
+<p>Based on the Thales Intercept Theorem.
+Where we set a heating case that is 10x the floor area and determine the temperature as a result
+Assuming that the relation is linear, one can draw a right angle triangle.
+From this we can determine the heating level required to achieve the set point temperature
+This assumes a perfect HVAC control system</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dibs_computing_core.iso_simulator.model.building.Building.calc_h_ve_adj">
+<span class="sig-name descname"><span class="pre">calc_h_ve_adj</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hour</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_out</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">usage_start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">usage_end</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dibs_computing_core.iso_simulator.model.building.Building.calc_h_ve_adj" title="Link to this definition"></a></dt>
+<dd><p>Calculates h_ve_adj depending on the building’s usage time</p>
+<p># (Eq. 21) in ISO 13790, p. 49-50</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hour</strong> (<em>int</em>) – Hour of the timestep</p></li>
+<li><p><strong>t_out</strong> (<em>float</em>) – Outdoor temperature of this timestep</p></li>
+<li><p><strong>usage_start</strong> (<em>int</em>) – Beginning of usage time according to SIA2024</p></li>
+<li><p><strong>usage_end</strong> (<em>int</em>) – Ending of usage time according to SIA2024</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>self.h_ve_adj</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dibs_computing_core.iso_simulator.model.building.Building.calc_heat_flow">
+<span class="sig-name descname"><span class="pre">calc_heat_flow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t_out</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">internal_gains</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solar_gains</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">energy_demand</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dibs_computing_core.iso_simulator.model.building.Building.calc_heat_flow" title="Link to this definition"></a></dt>
+<dd><p>Calculates the heat flow from the solar gains, heating/cooling system, and internal gains into the building</p>
+<p>The input of the building is split into the air node, surface node, and thermal mass node based on
+on the following equations</p>
+<p>#C.1 - C.3 in [C.3 ISO 13790]</p>
+<p>Note that this equation has diverged slightly from the standard
+as the heating/cooling node can enter any node depending on the
+emission system selected</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dibs_computing_core.iso_simulator.model.building.Building.calc_phi_m_tot">
+<span class="sig-name descname"><span class="pre">calc_phi_m_tot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t_out</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dibs_computing_core.iso_simulator.model.building.Building.calc_phi_m_tot" title="Link to this definition"></a></dt>
+<dd><p>Calculates a global heat transfer. This is a definition used to simplify equation
+calc_t_m_next so it’s not so long to write out
+# (C.5) in [C.3 ISO 13790]
+# h_ve = h_ve_adj and t_supply = t_out [9.3.2 ISO 13790]</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dibs_computing_core.iso_simulator.model.building.Building.calc_t_air">
+<span class="sig-name descname"><span class="pre">calc_t_air</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t_out</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dibs_computing_core.iso_simulator.model.building.Building.calc_t_air" title="Link to this definition"></a></dt>
+<dd><p>Calculate the temperature of the air node
+# (C.11) in [C.3 ISO 13790]
+# h_ve = h_ve_adj and t_supply = t_out [9.3.2 ISO 13790]</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dibs_computing_core.iso_simulator.model.building.Building.calc_t_m">
+<span class="sig-name descname"><span class="pre">calc_t_m</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t_m_prev</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dibs_computing_core.iso_simulator.model.building.Building.calc_t_m" title="Link to this definition"></a></dt>
+<dd><p>Temperature used for the calculations, average between newly calculated and previous bulk temperature
+# (C.9) in [C.3 ISO 13790]</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dibs_computing_core.iso_simulator.model.building.Building.calc_t_m_next">
+<span class="sig-name descname"><span class="pre">calc_t_m_next</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t_m_prev</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dibs_computing_core.iso_simulator.model.building.Building.calc_t_m_next" title="Link to this definition"></a></dt>
+<dd><p>Primary Equation, calculates the temperature of the next time step
+# (C.4) in [C.3 ISO 13790]</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dibs_computing_core.iso_simulator.model.building.Building.calc_t_s">
+<span class="sig-name descname"><span class="pre">calc_t_s</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t_out</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dibs_computing_core.iso_simulator.model.building.Building.calc_t_s" title="Link to this definition"></a></dt>
+<dd><p>Calculate the temperature of the inside room surfaces.
+Consists of the air temperature and the average radiation temperature
+# (C.10) in [C.3 ISO 13790]
+# h_ve = h_ve_adj and t_supply = t_out [9.3.2 ISO 13790]</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dibs_computing_core.iso_simulator.model.building.Building.calc_temperatures_crank_nicolson">
+<span class="sig-name descname"><span class="pre">calc_temperatures_crank_nicolson</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">energy_demand</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">internal_gains</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solar_gains</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_out</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_m_prev</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dibs_computing_core.iso_simulator.model.building.Building.calc_temperatures_crank_nicolson" title="Link to this definition"></a></dt>
+<dd><p>Determines node temperatures (t_air, t_m, t_s) and computes derivation to determine the new node temperatures
+Used in: has_demand(), solve_building_energy(), calc_energy_demand()
+# section C.3 in [C.3 ISO 13790]</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dibs_computing_core.iso_simulator.model.building.Building.check_night_flushing">
+<span class="sig-name descname"><span class="pre">check_night_flushing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hour</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_out</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dibs_computing_core.iso_simulator.model.building.Building.check_night_flushing" title="Link to this definition"></a></dt>
+<dd><p>Checks if night flushing is on/off</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hour</strong> (<em>int</em>) – Hour of the timestep</p></li>
+<li><p><strong>t_out</strong> (<em>float</em>) – Outdoor temperature of this timestep</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>self.night_flushing_on</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dibs_computing_core.iso_simulator.model.building.Building.h_tr_1">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">h_tr_1</span></span><a class="headerlink" href="#dibs_computing_core.iso_simulator.model.building.Building.h_tr_1" title="Link to this definition"></a></dt>
+<dd><p>Definition to simplify calc_phi_m_tot
+# (C.6) in [C.3 ISO 13790]</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dibs_computing_core.iso_simulator.model.building.Building.h_tr_2">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">h_tr_2</span></span><a class="headerlink" href="#dibs_computing_core.iso_simulator.model.building.Building.h_tr_2" title="Link to this definition"></a></dt>
+<dd><p>Definition to simplify calc_phi_m_tot
+# (C.7) in [C.3 ISO 13790]</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dibs_computing_core.iso_simulator.model.building.Building.h_tr_3">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">h_tr_3</span></span><a class="headerlink" href="#dibs_computing_core.iso_simulator.model.building.Building.h_tr_3" title="Link to this definition"></a></dt>
+<dd><p>Definition to simplify calc_phi_m_tot
+# (C.8) in [C.3 ISO 13790]</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dibs_computing_core.iso_simulator.model.building.Building.has_demand">
+<span class="sig-name descname"><span class="pre">has_demand</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">internal_gains</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solar_gains</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_out</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_m_prev</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dibs_computing_core.iso_simulator.model.building.Building.has_demand" title="Link to this definition"></a></dt>
+<dd><p>Determines whether the building requires heating or cooling
+Used in: solve_building_energy()</p>
+<p># step 1 in section C.4.2 in [C.3 ISO 13790]</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dibs_computing_core.iso_simulator.model.building.Building.solve_building_energy">
+<span class="sig-name descname"><span class="pre">solve_building_energy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">internal_gains</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solar_gains</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_out</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_m_prev</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dibs_computing_core.iso_simulator.model.building.Building.solve_building_energy" title="Link to this definition"></a></dt>
+<dd><p>Calculates the heating and cooling consumption of a building for a set timestep</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>internal_gains</strong> (<em>float</em>) – internal heat gains from people and appliances [W]</p></li>
+<li><p><strong>solar_gains</strong> (<em>float</em>) – solar heat gains [W]</p></li>
+<li><p><strong>t_out</strong> (<em>float</em>) – Outdoor air temperature [C]</p></li>
+<li><p><strong>t_m_prev</strong> (<em>float</em>) – Previous air temperature [C]</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>self.heating_demand, space heating demand of the building</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>self.heating_sys_electricity, heating electricity consumption</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>self.heating_sys_fossils, heating fossil fuel consumption</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>self.cooling_demand, space cooling demand of the building</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>self.cooling_sys_electricity, electricity consumption from cooling</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>self.cooling_sys_fossils, fossil fuel consumption from cooling</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>self.electricity_out, electricity produced from combined heat pump systems</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>self.sys_total_energy, total exergy consumed (electricity + fossils) for heating and cooling</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>self.heating_energy, total exergy consumed (electricity + fossils) for heating</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>self.cooling_energy, total exergy consumed (electricity + fossils) for cooling</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>self.cop, Coefficient of Performance of the heating or cooling system</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dibs_computing_core.iso_simulator.model.building.Building.solve_building_lighting">
+<span class="sig-name descname"><span class="pre">solve_building_lighting</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">illuminance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">occupancy</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dibs_computing_core.iso_simulator.model.building.Building.solve_building_lighting" title="Link to this definition"></a></dt>
+<dd><p>Calculates the lighting demand for a set timestep</p>
+<p>Daylighting is based on methods in
+Szokolay, S.V. (1980): Environmental Science Handbook vor architects and builders. Unknown Edition, The Construction Press, Lancaster/London/New York, ISBN: 0-86095-813-2, p. 105ff.
+respectively
+Szokolay, S.V. (2008): Introduction to Architectural Science. The Basis of Sustainable Design. 2nd Edition, Elsevier/Architectural Press, Oxford, ISBN: 978-0-7506-8704-1, p. 154ff.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>illuminance</strong> (<em>float</em>) – Illuminance transmitted through the window [Lumens]</p></li>
+<li><p><strong>occupancy</strong> (<em>float</em>) – Probability of full occupancy</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>self.lighting_demand, Lighting Energy Required for the timestep</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="dibs_computing_core.iso_simulator.model.building.Building.t_opperative">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">t_opperative</span></span><a class="headerlink" href="#dibs_computing_core.iso_simulator.model.building.Building.t_opperative" title="Link to this definition"></a></dt>
+<dd><p>The opperative temperature is a weighted average of the air and mean radiant temperatures.
+It is not used in any further calculation at this stage
+# (C.12) in [C.3 ISO 13790]</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-dibs_computing_core.iso_simulator.model.calculations_sum">
+<span id="dibs-computing-core-iso-simulator-model-calculations-sum-module"></span><h2>dibs_computing_core.iso_simulator.model.calculations_sum module<a class="headerlink" href="#module-dibs_computing_core.iso_simulator.model.calculations_sum" title="Link to this heading"></a></h2>
+<p>This class is used to store the sum of all the simulated hours for a building</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="dibs_computing_core.iso_simulator.model.calculations_sum.CalculationOfSum">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dibs_computing_core.iso_simulator.model.calculations_sum.</span></span><span class="sig-name descname"><span class="pre">CalculationOfSum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">HeatingDemand_sum</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">HeatingEnergy_sum</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Heating_Sys_Electricity_sum</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Heating_Sys_Fossils_sum</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CoolingDemand_sum</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CoolingEnergy_sum</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Cooling_Sys_Electricity_sum</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Cooling_Sys_Fossils_sum</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">HotWaterDemand_sum</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">HotWaterEnergy_sum</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">HotWater_Sys_Electricity_sum</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">HotWater_Sys_Fossils_sum</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">InternalGains_sum</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Appliance_gains_demand_sum</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Appliance_gains_elt_demand_sum</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">LightingDemand_sum</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">SolarGainsSouthWindow_sum</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">SolarGainsEastWindow_sum</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">SolarGainsWestWindow_sum</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">SolarGainsNorthWindow_sum</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">SolarGainsTotal_sum</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dibs_computing_core.iso_simulator.model.calculations_sum.CalculationOfSum" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+</section>
+<section id="module-dibs_computing_core.iso_simulator.model.epw_file">
+<span id="dibs-computing-core-iso-simulator-model-epw-file-module"></span><h2>dibs_computing_core.iso_simulator.model.epw_file module<a class="headerlink" href="#module-dibs_computing_core.iso_simulator.model.epw_file" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="dibs_computing_core.iso_simulator.model.epw_file.EPWFile">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dibs_computing_core.iso_simulator.model.epw_file.</span></span><span class="sig-name descname"><span class="pre">EPWFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coordinates_station</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dibs_computing_core.iso_simulator.model.epw_file.EPWFile" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Sets the parameters of the EPWFile.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>file_name: The name of the EPW file
+coordinates_station: The coordinates of the station
+distance: The nearest distance between the station and the building</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-dibs_computing_core.iso_simulator.model.hours_result">
+<span id="dibs-computing-core-iso-simulator-model-hours-result-module"></span><h2>dibs_computing_core.iso_simulator.model.hours_result module<a class="headerlink" href="#module-dibs_computing_core.iso_simulator.model.hours_result" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="dibs_computing_core.iso_simulator.model.hours_result.Result">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dibs_computing_core.iso_simulator.model.hours_result.</span></span><span class="sig-name descname"><span class="pre">Result</span></span><a class="headerlink" href="#dibs_computing_core.iso_simulator.model.hours_result.Result" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This class contains the result for the calculation of a building</p>
+<p>Args:</p>
+<blockquote>
+<div><p>heating_demand (List[float]): Space heating demand of the building
+heating_energy (List[float]): Total exergy consumed (electricity + fossils) for heating
+heating_sys_electricity (List[float]): Hating electricity consumption
+heating_sys_fossils (List[float]): Hating fossil fuel consumption
+cooling_demand (List[float]): Space cooling demand of the building
+cooling_energy (List[float]): Total exergy consumed (electricity + fossils) for cooling
+cooling_sys_electricity (List[float]): Electricity consumption from cooling
+cooling_sys_fossils (List[float]): Fossil fuel consumption from cooling
+hotwater_demand (List[float]): Hot water demand of the building
+hotwater_energy (List[float]):
+hotwater_sys_electricity (List[float]):
+hotwater_sys_fossils (List[float]):
+temp_air (List[float]): Temperature of the air
+outside_temp (List[float]): Temperature of the outside air
+lighting_demand (List[float]): Lighting Energy Required for the timestep
+internal_gains (List[float]): Internal Heat Gains [W]
+solar_gains_south_window (List[float]):
+solar_gains_east_window (List[float]):
+solar_gains_west_window (List[float]):
+solar_gains_north_window (List[float]):
+solar_gains_total (List[float]):
+day_time:
+hotwaterdemand:
+hotwaterenergy:
+hot)water_sys_electricity:
+hot_water_sys_fossils:</p>
+</div></blockquote>
+<dl class="py method">
+<dt class="sig sig-object py" id="dibs_computing_core.iso_simulator.model.hours_result.Result.append_results">
+<span class="sig-name descname"><span class="pre">append_results</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">building</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#dibs_computing_core.iso_simulator.model.building.Building" title="dibs_computing_core.iso_simulator.model.building.Building"><span class="pre">Building</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">all_windows</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#dibs_computing_core.iso_simulator.model.window.Window" title="dibs_computing_core.iso_simulator.model.window.Window"><span class="pre">Window</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hot_water_demand</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hot_water_energy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hot_water_sys_electricity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hot_water_sys_fossils</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_out</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">internal_gains</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">appliance_gains_demand</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">appliance_gains_elt_demand</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solar_gains_all_windows</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hour</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#dibs_computing_core.iso_simulator.model.hours_result.Result.append_results" title="Link to this definition"></a></dt>
+<dd><p>This method appends the result of a simulated hour in the object result
+Args:</p>
+<blockquote>
+<div><p>building:
+all_windows:
+hot_water_demand:
+hot_water_energy:
+hot_water_sys_electricity:
+hot_water_sys_fossils:
+t_out:
+internal_gains:
+appliance_gains_demand:
+appliance_gains_elt_demand:
+solar_gains_all_windows:
+hour:</p>
+</div></blockquote>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dibs_computing_core.iso_simulator.model.hours_result.Result.calc_sum_of_results">
+<span class="sig-name descname"><span class="pre">calc_sum_of_results</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#dibs_computing_core.iso_simulator.model.calculations_sum.CalculationOfSum" title="dibs_computing_core.iso_simulator.model.calculations_sum.CalculationOfSum"><span class="pre">CalculationOfSum</span></a></span></span><a class="headerlink" href="#dibs_computing_core.iso_simulator.model.hours_result.Result.calc_sum_of_results" title="Link to this definition"></a></dt>
+<dd><p>Calculates the sum of results
+Returns:</p>
+<blockquote>
+<div><p>sum_of_all_results</p>
+</div></blockquote>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-dibs_computing_core.iso_simulator.model.location">
+<span id="dibs-computing-core-iso-simulator-model-location-module"></span><h2>dibs_computing_core.iso_simulator.model.location module<a class="headerlink" href="#module-dibs_computing_core.iso_simulator.model.location" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="dibs_computing_core.iso_simulator.model.location.Location">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dibs_computing_core.iso_simulator.model.location.</span></span><span class="sig-name descname"><span class="pre">Location</span></span><a class="headerlink" href="#dibs_computing_core.iso_simulator.model.location.Location" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="dibs_computing_core.iso_simulator.model.location.Location.calc_sun_position">
+<span class="sig-name descname"><span class="pre">calc_sun_position</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">latitude_deg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">longitude_deg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">year</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hoy</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dibs_computing_core.iso_simulator.model.location.Location.calc_sun_position" title="Link to this definition"></a></dt>
+<dd><p>Calculates the sun position for a specific hour and location</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>latitude_deg</strong> (<em>float</em>) – Geographical Latitude in Degrees</p></li>
+<li><p><strong>longitude_deg</strong> (<em>float</em>) – Geographical Longitude in Degrees</p></li>
+<li><p><strong>year</strong> (<em>int</em>) – year</p></li>
+<li><p><strong>hoy</strong> (<em>int</em>) – Hour of the year from the start. The first hour of January is 1</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>altitude, azimuth: Sun position in altitude and azimuth degrees [degrees]</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-dibs_computing_core.iso_simulator.model.primary_energy_and_emission_factors">
+<span id="dibs-computing-core-iso-simulator-model-primary-energy-and-emission-factors-module"></span><h2>dibs_computing_core.iso_simulator.model.primary_energy_and_emission_factors module<a class="headerlink" href="#module-dibs_computing_core.iso_simulator.model.primary_energy_and_emission_factors" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="dibs_computing_core.iso_simulator.model.primary_energy_and_emission_factors.PrimaryEnergyAndEmissionFactor">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dibs_computing_core.iso_simulator.model.primary_energy_and_emission_factors.</span></span><span class="sig-name descname"><span class="pre">PrimaryEnergyAndEmissionFactor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">energy_carrier</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">primary_energy_factor_GEG</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relation_calorific_to_heating_value_GEG</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gwp_spezific_to_heating_value_GEG</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dibs_computing_core.iso_simulator.model.primary_energy_and_emission_factors.PrimaryEnergyAndEmissionFactor" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+</section>
+<section id="module-dibs_computing_core.iso_simulator.model.schedule_name">
+<span id="dibs-computing-core-iso-simulator-model-schedule-name-module"></span><h2>dibs_computing_core.iso_simulator.model.schedule_name module<a class="headerlink" href="#module-dibs_computing_core.iso_simulator.model.schedule_name" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="dibs_computing_core.iso_simulator.model.schedule_name.ScheduleName">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dibs_computing_core.iso_simulator.model.schedule_name.</span></span><span class="sig-name descname"><span class="pre">ScheduleName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">People</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Appliances</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dibs_computing_core.iso_simulator.model.schedule_name.ScheduleName" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+</section>
+<section id="module-dibs_computing_core.iso_simulator.model.summary_result">
+<span id="dibs-computing-core-iso-simulator-model-summary-result-module"></span><h2>dibs_computing_core.iso_simulator.model.summary_result module<a class="headerlink" href="#module-dibs_computing_core.iso_simulator.model.summary_result" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="dibs_computing_core.iso_simulator.model.summary_result.SummaryResult">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dibs_computing_core.iso_simulator.model.summary_result.</span></span><span class="sig-name descname"><span class="pre">SummaryResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">result</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#dibs_computing_core.iso_simulator.model.ResultOutput.ResultOutput" title="dibs_computing_core.iso_simulator.model.ResultOutput.ResultOutput"><span class="pre">ResultOutput</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dibs_computing_core.iso_simulator.model.summary_result.SummaryResult" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+</section>
+<section id="module-dibs_computing_core.iso_simulator.model.weather_data">
+<span id="dibs-computing-core-iso-simulator-model-weather-data-module"></span><h2>dibs_computing_core.iso_simulator.model.weather_data module<a class="headerlink" href="#module-dibs_computing_core.iso_simulator.model.weather_data" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="dibs_computing_core.iso_simulator.model.weather_data.WeatherData">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dibs_computing_core.iso_simulator.model.weather_data.</span></span><span class="sig-name descname"><span class="pre">WeatherData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">year</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">month</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">day</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hour</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minute</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datasource</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drybulb_C</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dewpoint_C</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relhum_percent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atmos_Pa</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exthorrad_Whm2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extdirrad_Whm2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">horirsky_Whm2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">glohorrad_Whm2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dirnorrad_Whm2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">difhorrad_Whm2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">glohorillum_lux</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dirnorillum_lux</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">difhorillum_lux</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zenlum_lux</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">winddir_deg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">windspd_ms</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">totskycvr_tenths</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opaqskycvr_tenths</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">visibility_km</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ceiling_hgt_m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">presweathobs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">presweathcodes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">precip_wtr_mm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aerosol_opt_thousandths</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">snowdepth_cm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">days_last_snow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Albedo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">liq_precip_depth_mm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">liq_precip_rate_Hour</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dibs_computing_core.iso_simulator.model.weather_data.WeatherData" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+</section>
+<section id="module-dibs_computing_core.iso_simulator.model.window">
+<span id="dibs-computing-core-iso-simulator-model-window-module"></span><h2>dibs_computing_core.iso_simulator.model.window module<a class="headerlink" href="#module-dibs_computing_core.iso_simulator.model.window" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="dibs_computing_core.iso_simulator.model.window.Window">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dibs_computing_core.iso_simulator.model.window.</span></span><span class="sig-name descname"><span class="pre">Window</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">azimuth_tilt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alititude_tilt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">90</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">glass_solar_transmittance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.7</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">glass_solar_shading_transmittance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">glass_light_transmittance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">area</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dibs_computing_core.iso_simulator.model.window.Window" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="dibs_computing_core.iso_simulator.model.window.Window.calc_diffuse_solar_factor">
+<span class="sig-name descname"><span class="pre">calc_diffuse_solar_factor</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#dibs_computing_core.iso_simulator.model.window.Window.calc_diffuse_solar_factor" title="Link to this definition"></a></dt>
+<dd><p>Calculates the proportion of diffuse radiation</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dibs_computing_core.iso_simulator.model.window.Window.calc_direct_solar_factor">
+<span class="sig-name descname"><span class="pre">calc_direct_solar_factor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sun_altitude</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sun_azimuth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#dibs_computing_core.iso_simulator.model.window.Window.calc_direct_solar_factor" title="Link to this definition"></a></dt>
+<dd><p>Calculates the cosine of the angle of incidence on the window</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dibs_computing_core.iso_simulator.model.window.Window.calc_illuminance">
+<span class="sig-name descname"><span class="pre">calc_illuminance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sun_altitude</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sun_azimuth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normal_direct_illuminance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">horizontal_diffuse_illuminance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#dibs_computing_core.iso_simulator.model.window.Window.calc_illuminance" title="Link to this definition"></a></dt>
+<dd><p>Calculates the illuminance in the building zone through the set window</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sun_altitude</strong> (<em>float</em>) – Altitude Angle of the Sun in Degrees</p></li>
+<li><p><strong>sun_azimuth</strong> (<em>float</em>) – Azimuth angle of the sun in degrees</p></li>
+<li><p><strong>normal_direct_illuminance</strong> (<em>float</em>) – Normal Direct Illuminance from weather file [Lx]</p></li>
+<li><p><strong>horizontal_diffuse_illuminance</strong> (<em>float</em>) – Horizontal Diffuse Illuminance from weather file [Lx]</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>self.incident_illuminance, Incident Illuminance on window [Lumens]</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>self.transmitted_illuminance - Illuminance in building after transmitting through the window [Lumens]</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dibs_computing_core.iso_simulator.model.window.Window.calc_solar_gains">
+<span class="sig-name descname"><span class="pre">calc_solar_gains</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sun_altitude</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sun_azimuth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normal_direct_radiation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">horizontal_diffuse_radiation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_air</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hour</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#dibs_computing_core.iso_simulator.model.window.Window.calc_solar_gains" title="Link to this definition"></a></dt>
+<dd><p>Calculates the solar gains in the building zone through the set window</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sun_altitude</strong> (<em>float</em>) – Altitude Angle of the Sun in Degrees</p></li>
+<li><p><strong>sun_azimuth</strong> (<em>float</em>) – Azimuth angle of the sun in degrees</p></li>
+<li><p><strong>normal_direct_radiation</strong> (<em>float</em>) – Normal Direct Radiation from weather file</p></li>
+<li><p><strong>horizontal_diffuse_radiation</strong> (<em>float</em>) – Horizontal Diffuse Radiation from weather file</p></li>
+</ul>
+</dd>
+</dl>
+<p># Added:
+#param t_out: Outdoor temperature from weather file
+:type t_out: float</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>self.incident_solar, Incident Solar Radiation on window</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>self.solar_gains - Solar gains in building after transmitting through the window</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dibs_computing_core.iso_simulator.model.window.Window.set_variable_for_calc_sun">
+<span class="sig-name descname"><span class="pre">set_variable_for_calc_sun</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sun_altitude</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sun_azimuth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normal_direct_radiation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">horizontal_diffuse_radiation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#dibs_computing_core.iso_simulator.model.window.Window.set_variable_for_calc_sun" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-dibs_computing_core.iso_simulator.model">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-dibs_computing_core.iso_simulator.model" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="dibs_computing_core.iso_simulator.exceptions.html" class="btn btn-neutral float-left" title="dibs_computing_core.iso_simulator.exceptions package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, IWUGERMANY.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
