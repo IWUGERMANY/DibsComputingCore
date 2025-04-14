@@ -105,9 +105,6 @@ class SummaryResult:
         self.usage_from_norm = usage_from_norm
         self.weather_period = weather_period
 
-        print(
-            f'heating_sys_gwp is : {self.heating_sys_gwp} and  heating_sys_gwp_surface is {self.heating_sys_gwp_surface}')
-
     def __str__(self):
         attrs = "\n".join([f'{key} = {getattr(self, key)}' for key in vars(self)])
         return f"SummaryResult of th simulation: {attrs}"

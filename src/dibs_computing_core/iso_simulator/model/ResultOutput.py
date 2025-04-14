@@ -83,8 +83,6 @@ class ResultOutput:
         self.typ_norm = typ_norm
         self.epw_filename = epw_filename
 
-        print(f"Building ref area is : {building.energy_ref_area}")
-
     def calc_heating_demand(self):
         return self.sum_object.HeatingDemand_sum / self.building.energy_ref_area
 
