@@ -331,6 +331,8 @@ class Building(object):
         self.heating_emission_system = heating_emission_system
         self.cooling_emission_system = cooling_emission_system
 
+        print(f'bd_id id : {self.scr_gebaeude_id}, energy_demand_unrestricted is : {self.energy_demand_unrestricted}')
+
     @property
     def h_tr_1(self):
         """
@@ -774,7 +776,6 @@ class Building(object):
         self.calc_energy_demand_unrestricted(
             energy_floorAx10, t_air_set, t_air_0, t_air_10
         )
-        print(f'bd_id id : {self.scr_gebaeude_id}, energy_demand_unrestricted is : {self.energy_demand_unrestricted}')
 
         # Step 3: Check if available heating or cooling power is sufficient
         # If max_cooling_energy_per_floor_area is set so -inf and
