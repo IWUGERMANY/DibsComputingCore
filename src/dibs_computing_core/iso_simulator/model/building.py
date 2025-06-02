@@ -770,7 +770,6 @@ class Building(object):
         t_air_10 = self.calc_temperatures_crank_nicolson(
             energy_floorAx10, internal_gains, solar_gains, t_out, t_m_prev
         )[1]
-        print(f'energy_floorAx10: {energy_floorAx10}, t_air_set: {t_air_set}, t_air_0: {t_air_0}, t_air_10: {t_air_10}')
         # Determine the unrestricted heating/cooling of the building
         self.calc_energy_demand_unrestricted(
             energy_floorAx10, t_air_set, t_air_0, t_air_10
