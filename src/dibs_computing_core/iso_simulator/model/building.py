@@ -822,7 +822,7 @@ class Building(object):
         From this we can determine the heating level required to achieve the set point temperature
         This assumes a perfect HVAC control system
         """
-        print(f'----------Building id is : {self.scr_gebaeude_id}----------')
+        print(f'energy_floorAx10: {energy_floorAx10}, t_air_set: {t_air_set}, t_air_0: {t_air_0}, t_air_10: {t_air_10}')
         self.energy_demand_unrestricted = (
                 energy_floorAx10 * (t_air_set - t_air_0) / (t_air_10 - t_air_0)
         )
