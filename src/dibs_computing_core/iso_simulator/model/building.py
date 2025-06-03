@@ -331,8 +331,6 @@ class Building(object):
         self.heating_emission_system = heating_emission_system
         self.cooling_emission_system = cooling_emission_system
 
-        print(f'bd_id id : {self.scr_gebaeude_id}, energy_demand_unrestricted is : {self.energy_demand_unrestricted}')
-
     @property
     def h_tr_1(self):
         """
@@ -823,6 +821,9 @@ class Building(object):
         From this we can determine the heating level required to achieve the set point temperature
         This assumes a perfect HVAC control system
         """
+        if t_air_10 - t_air_0 == 0:
+            print(f'bd_id is : {self.scr_gebaeude_id}')
+
         self.energy_demand_unrestricted = (
                 energy_floorAx10 * (t_air_set - t_air_0) / (t_air_10 - t_air_0)
         )
