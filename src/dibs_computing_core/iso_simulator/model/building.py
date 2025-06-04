@@ -910,7 +910,7 @@ class Building(object):
             print(f"t_m_prev is of type {type(t_m_prev)}.")
 
         act_val1 = (
-                                 (round(t_m_prev,16) * ((self.c_m / 3600.0) - 0.5 * (self.h_tr_3 + self.h_tr_em)))
+                                 (round(t_m_prev,8) * ((self.c_m / 3600.0) - 0.5 * (self.h_tr_3 + self.h_tr_em)))
                                  + self.phi_m_tot
                          )
 
