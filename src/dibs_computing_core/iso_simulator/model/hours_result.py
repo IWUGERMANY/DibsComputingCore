@@ -103,7 +103,6 @@ class Result:
         self.heating_energy.append(building.heating_energy)
         self.heating_sys_electricity.append(building.heating_sys_electricity)
         self.heating_sys_fossils.append(building.heating_sys_fossils)
-        print(f'heating_sys_fossils is : {self.heating_sys_fossils}')
         self.cooling_demand.append(building.cooling_demand)
         self.cooling_energy.append(building.cooling_energy)
         self.cooling_sys_electricity.append(building.cooling_sys_electricity)
