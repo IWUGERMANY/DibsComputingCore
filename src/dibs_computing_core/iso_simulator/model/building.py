@@ -904,6 +904,10 @@ class Building(object):
         Primary Equation, calculates the temperature of the next time step
         # (C.4) in [C.3 ISO 13790]
         """
+        if self.scr_gebaeude_id == "HB-2024-7810":
+            print(f"Execution of calc_t_m_next.")
+            print(f"t_m_prev is {t_m_prev}, c_m is {self.c_m}, h_tr_3 is {self.h_tr_3}, h_tr_em is {self.h_tr_em}, phi_m_tot is {self.phi_m_tot} .")
+
 
         self.t_m_next = (
                                 (t_m_prev * ((self.c_m / 3600.0) - 0.5 * (self.h_tr_3 + self.h_tr_em)))
