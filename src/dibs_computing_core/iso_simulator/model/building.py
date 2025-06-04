@@ -739,6 +739,7 @@ class Building(object):
         # Step 1 - Step 4 in Section C.4.2 in [C.3 ISO 13790]
         """
         if self.scr_gebaeude_id == "HB-2024-7810":
+            print(f"Start of execution of method calc_energy_demand().")
             print(f"internal gains is: {internal_gains}, solar_gains is: {solar_gains}, t_out ist: {t_out}, t_m_prev is: {t_m_prev}.")
         # Step 1: Check if heating or cooling is needed
         # (Not needed, but doing so for readability when comparing with the standard)
@@ -819,7 +820,7 @@ class Building(object):
         else:
             print(f"Building ID is: {self.scr_gebaeude_id}, energy ref area is: {self.energy_ref_area}, heating supply sys is: {self.heating_supply_system}, cooling supply sys is: {self.cooling_supply_system}.")
             if self.scr_gebaeude_id == "HB-2024-7810":
-                print(f"max_cooling_energy is: {self.max_cooling_energy}, energy_demand_unrestricted is: {self.energy_demand_unrestricted}, max_heating_energy is: {max_heating_energy}.")
+                print(f"max_cooling_energy is: {self.max_cooling_energy}, energy_demand_unrestricted is: {self.energy_demand_unrestricted}, max_heating_energy is: {self.max_heating_energy}.")
             self.energy_demand = 0
             raise ValueError("unknown radiative heating/cooling system status")
 
