@@ -799,6 +799,7 @@ class Building(object):
             self.energy_demand = self.max_cooling_energy
 
         else:
+            print(f"Building ID is: {self.scr_gebaeude_id}, energy ref area is: {self.energy_ref_area}, heating supply sys is: {self.heating_supply_system}, cooling supply sys is: {self.cooling_supply_system}.")
             self.energy_demand = 0
             raise ValueError("unknown radiative heating/cooling system status")
 
