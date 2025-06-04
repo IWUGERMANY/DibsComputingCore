@@ -190,6 +190,8 @@ def extracted_method_to_simulate_one_building(simulator: BuildingSimulator, t_se
     f_ghg, f_pe, f_hs_hi, fuel_type = simulator.get_ghg_pe_conversion_factors(
         fuel_type
     )
+    if type(f_hs_hi) is type(None):
+        print(f'bd_id: {simulator.datasource.building.scr_gebaeude_id} and f_hs_hi: {f_hs_hi}')
     (
         heating_sys_electricity_hi_sum,
         heating_sys_carbon_sum,
