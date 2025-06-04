@@ -922,6 +922,8 @@ class BuildingSimulator:
             heating_sys_carbon_sum = (heating_sys_electricity_hi_sum * f_ghg) / 1000
             heating_sys_pe_sum = heating_sys_electricity_hi_sum * f_pe
         else:
+            if not calculation_of_sum.Heating_Sys_Fossils_sum or not f_hs_hi:
+                print(f'----------------bd_id is : {self.datasource.building.scr_gebaeude_id}----------------')
             heating_sys_fossils_hi_sum = (
                     calculation_of_sum.Heating_Sys_Fossils_sum / f_hs_hi
             )
