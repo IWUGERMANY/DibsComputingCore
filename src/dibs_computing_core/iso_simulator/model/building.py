@@ -625,6 +625,9 @@ class Building(object):
             )  # Initialise Heating System Manager
 
             if self.has_heating_demand:
+                if not self.heating_supply_system:
+                    print(f"Not self.heating_supply_system is TRUE >> ID ist {self.scr_gebaeude_id}, self.heating_supply_system is: {self.heating_supply_system}."
+
                 my_system = self.supply_mapping[self.heating_supply_system](
                     load=self.energy_demand,
                     t_out=t_out,
@@ -843,7 +846,8 @@ class Building(object):
         From this we can determine the heating level required to achieve the set point temperature
         This assumes a perfect HVAC control system
         """
-
+        if (t_air_10 - t_air_0) == 0:
+            print(f"(t_air_10 - t_air_0) == 0 >> ID is {self.scr_gebaeude_id}.")
         self.energy_demand_unrestricted = (
                 energy_floorAx10 * (t_air_set - t_air_0) / (t_air_10 - t_air_0)
         )
