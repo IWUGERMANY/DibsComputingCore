@@ -20,6 +20,8 @@ from ..emission_system import *
 
 from ..supply_system import *
 
+import math
+
 
 class Building(object):
     """
@@ -624,12 +626,17 @@ class Building(object):
                 SupplyDirector()
             )  # Initialise Heating System Manager
 
-            if self.has_heating_demand:
-                #if not self.heating_supply_system or not isinstance(self.heating_supply_system, (str, int, float)):
-                print(f"Not self.heating_supply_system is TRUE >> ID ist {self.scr_gebaeude_id}, self.heating_supply_system is: {self.heating_supply_system}.")
+            def is_none_or_nan(x):
+                return x is None or (isinstance(x, float) and math.isnan(x))
 
-                if self.energy_demand is None:
-                    print(f'bd_is is : {self.scr_gebaeude_id}, energy_demand is : {self.energy_demand}')
+            if self.has_heating_demand:
+
+                for name, value in [('energy_demand', self.energy_demand), ('t_out', t_out),
+                                    ('heating_supply_temperature', self.heating_supply_temperature),
+                                    ('cooling_supply_temperature', self.cooling_supply_temperature)]:
+                    if is_none_or_nan(value):
+                        print(f"bd_is is : {self.scr_gebaeude_id}, {name} ist: {value}")
+
                 my_system = self.supply_mapping[self.heating_supply_system](
                     load=self.energy_demand,
                     t_out=t_out,
@@ -745,7 +752,8 @@ class Building(object):
         """
         if self.scr_gebaeude_id == "HB-2024-7810":
             print(f"Start of execution of method calc_energy_demand().")
-            print(f"internal gains is: {internal_gains}, solar_gains is: {solar_gains}, t_out ist: {t_out}, t_m_prev is: {t_m_prev}.")
+            print(
+                f"internal gains is: {internal_gains}, solar_gains is: {solar_gains}, t_out ist: {t_out}, t_m_prev is: {t_m_prev}.")
         # Step 1: Check if heating or cooling is needed
         # (Not needed, but doing so for readability when comparing with the standard)
         # Set heating/cooling to 0
@@ -823,9 +831,11 @@ class Building(object):
             self.energy_demand = self.max_cooling_energy
 
         else:
-            print(f"Building ID is: {self.scr_gebaeude_id}, energy ref area is: {self.energy_ref_area}, heating supply sys is: {self.heating_supply_system}, cooling supply sys is: {self.cooling_supply_system}.")
+            print(
+                f"Building ID is: {self.scr_gebaeude_id}, energy ref area is: {self.energy_ref_area}, heating supply sys is: {self.heating_supply_system}, cooling supply sys is: {self.cooling_supply_system}.")
             if self.scr_gebaeude_id == "HB-2024-7810":
-                print(f"max_cooling_energy is: {self.max_cooling_energy}, energy_demand_unrestricted is: {self.energy_demand_unrestricted}, max_heating_energy is: {self.max_heating_energy}.")
+                print(
+                    f"max_cooling_energy is: {self.max_cooling_energy}, energy_demand_unrestricted is: {self.energy_demand_unrestricted}, max_heating_energy is: {self.max_heating_energy}.")
             self.energy_demand = 0
             raise ValueError("unknown radiative heating/cooling system status")
 
@@ -912,13 +922,14 @@ class Building(object):
         """
         if self.scr_gebaeude_id == "HB-2024-7810":
             print(f"Execution of calc_t_m_next.")
-            print(f"t_m_prev is {t_m_prev}, c_m is {self.c_m}, h_tr_3 is {self.h_tr_3}, h_tr_em is {self.h_tr_em}, phi_m_tot is {self.phi_m_tot} .")
+            print(
+                f"t_m_prev is {t_m_prev}, c_m is {self.c_m}, h_tr_3 is {self.h_tr_3}, h_tr_em is {self.h_tr_em}, phi_m_tot is {self.phi_m_tot} .")
             print(f"t_m_prev is of type {type(t_m_prev)}.")
 
         act_val1 = (
-                                 (t_m_prev * ((self.c_m / 3600.0) - 0.5 * (self.h_tr_3 + self.h_tr_em)))
-                                 + self.phi_m_tot
-                         )
+                (t_m_prev * ((self.c_m / 3600.0) - 0.5 * (self.h_tr_3 + self.h_tr_em)))
+                + self.phi_m_tot
+        )
 
         act_val2 = ((self.c_m / 3600.0) + 0.5 * (self.h_tr_3 + self.h_tr_em))
 
