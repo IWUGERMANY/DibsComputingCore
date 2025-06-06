@@ -68,6 +68,7 @@ def extracted_method_to_simulate_one_building(simulator: BuildingSimulator, t_se
         tuple[Result, ResultOutput]
 
     """
+    print(f'Gebäude mit ID {simulator.datasource.building.scr_gebaeude_id} wird berechnet: ')
     result = Result()
 
     simulator.check_energy_area_and_heating()
