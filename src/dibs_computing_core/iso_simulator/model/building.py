@@ -628,7 +628,8 @@ class Building(object):
                 #if not self.heating_supply_system or not isinstance(self.heating_supply_system, (str, int, float)):
                 print(f"Not self.heating_supply_system is TRUE >> ID ist {self.scr_gebaeude_id}, self.heating_supply_system is: {self.heating_supply_system}.")
 
-                print(f'energy_demand is : {self.energy_demand}')
+                if self.energy_demand is None:
+                    print(f'bd_is is : {self.scr_gebaeude_id}, energy_demand is : {self.energy_demand}')
                 my_system = self.supply_mapping[self.heating_supply_system](
                     load=self.energy_demand,
                     t_out=t_out,
