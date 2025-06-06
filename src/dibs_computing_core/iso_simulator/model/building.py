@@ -625,6 +625,7 @@ class Building(object):
             )  # Initialise Heating System Manager
 
             if self.has_heating_demand:
+                print(f'energy_demand is : {self.energy_demand}')
                 my_system = self.supply_mapping[self.heating_supply_system](
                     load=self.energy_demand,
                     t_out=t_out,
