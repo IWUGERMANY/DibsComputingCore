@@ -1,6 +1,6 @@
 [project]
 name = "dibs_computing_core"
-version = "1.0.0"
+version = "1.0.1"
 description = "DIBS---Dynamic-ISO-Building-Simulator is a simulation program for calculating the space heating, occupancy hot water, cooling and electricity demand of German non-residential buildings. Further the DIBS calculates the heating value based energy uses, the primary energy and the greenhouse gas emission based on the defined factors of the German building energy ordinance (Gebäudeenergiegesetz). The underlying resistance-capacity-model is based on the simplified hourly method of ISO 13790:2008."
 readme = "README.md"
 requires-python = ">=3.10.0"
