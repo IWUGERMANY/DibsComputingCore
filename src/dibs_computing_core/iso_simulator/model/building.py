@@ -637,8 +637,6 @@ class Building(object):
                     if is_none_or_nan(value):
                         print(f"bd_is is : {self.scr_gebaeude_id}, {name} ist: {value}")
 
-                print(f'heating_supply_system is : {self.heating_supply_system}')
-
                 my_system = self.supply_mapping[self.heating_supply_system](
                     load=self.energy_demand,
                     t_out=t_out,
