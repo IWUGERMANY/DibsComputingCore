@@ -13,6 +13,8 @@ from typing import List
 
 from .dibs_utils.dibs_auxiliary_functions import extracted_method_to_simulate_one_building, unpack_results
 
+from math import ceil
+
 
 class DIBS:
     def __init__(self, datasource: DataSource):
@@ -95,7 +97,6 @@ class DIBS:
             (simulation_time, results_all_hours, summary_results)
         """
         user_args = self.get_user_args()
-
         self.datasource.get_user_buildings()
         self.datasource.get_epw_pe_factors()
 
@@ -109,6 +110,40 @@ class DIBS:
                     (self.datasource.buildings, index)
                 )
                 results.append(result)
+
+            pool.close()
+            pool.join()
+
+            results = [result.get() for result in results]
+            end = time.time()
+            simulation_time = end - begin
+
+            result, result_output = unpack_results(results)
+
+            summary_results = [SummaryResult(result, user_args) for result in result_output]
+
+        return simulation_time, result, summary_results
+
+    def multi_with_batches(self, user_args, buildings, start, end, batch_results) -> tuple[float, Result: List[Result],
+                                                                                     List[SummaryResult]]:
+        """
+        Simulates all buildings parallel using multiprocessing.Pool()
+        Parameters
+
+        Returns
+            (simulation_time, results_all_hours, summary_results)
+        """
+
+        results = []
+        begin = time.time()
+        print(f'Gebäude von {start} bis {end} wird berechnet')
+        with multiprocessing.Pool() as pool:
+            for index in range(start, end):
+                result = pool.apply_async(
+                    self.calculate_result_of_all_buildings,
+                    (buildings, index)
+                )
+                batch_results.append(result)
 
             pool.close()
             pool.join()
