@@ -134,7 +134,7 @@ class DIBS:
 
         results = []
         begin = time.time()
-        print(f'Geb�ude von {start} bis {end} wird berechnet')
+        print(f'Gebäude von {start} bis {end} wird berechnet')
         with multiprocessing.Pool() as pool:
             for index in range(start, end):
                 result = pool.apply_async(
@@ -146,7 +146,7 @@ class DIBS:
             pool.close()
             pool.join()
 
-            results = [result.get() for result in results]
+            results = [result.get() for result in batch_results]
             end = time.time()
             simulation_time = end - begin
 
