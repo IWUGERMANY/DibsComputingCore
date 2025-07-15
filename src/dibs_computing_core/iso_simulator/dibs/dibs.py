@@ -13,8 +13,6 @@ from typing import List
 
 from .dibs_utils.dibs_auxiliary_functions import extracted_method_to_simulate_one_building, unpack_results
 
-from math import ceil
-
 
 class DIBS:
     def __init__(self, datasource: DataSource):
@@ -136,7 +134,7 @@ class DIBS:
 
         results = []
         begin = time.time()
-        print(f'Gebäude von {start} bis {end} wird berechnet')
+        print(f'Gebï¿½ude von {start} bis {end} wird berechnet')
         with multiprocessing.Pool() as pool:
             for index in range(start, end):
                 result = pool.apply_async(
