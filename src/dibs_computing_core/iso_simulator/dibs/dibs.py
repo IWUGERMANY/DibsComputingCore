@@ -34,7 +34,6 @@ class DIBS:
         Returns:
 
         """
-        time_begin = time.time()
 
         user_args = self.get_user_args()
 
@@ -43,7 +42,7 @@ class DIBS:
         simulator = BuildingSimulator(self.datasource)
 
         t_set_heating_temp = simulator.datasource.building.t_set_heating
-
+        time_begin = time.time()
         result, result_output = extracted_method_to_simulate_one_building(
             simulator, t_set_heating_temp)
         simulation_time = time.time() - time_begin
@@ -52,7 +51,6 @@ class DIBS:
 
     def initialize_data(self):
         self.datasource.get_user_building()
-        print(f'TYPE OF FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF: {self.datasource.building.energy_ref_area}, {type(self.datasource.building.energy_ref_area)}')
         self.datasource.get_epw_pe_factors()
         self.datasource.get_epw_file()
 
