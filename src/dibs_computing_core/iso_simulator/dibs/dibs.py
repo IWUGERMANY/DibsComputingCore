@@ -52,6 +52,7 @@ class DIBS:
 
     def initialize_data(self):
         self.datasource.get_user_building()
+        print(f'TYPE OF FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF: {self.datasource.building.energy_ref_area}, {type(self.datasource.building.energy_ref_area)}')
         self.datasource.get_epw_pe_factors()
         self.datasource.get_epw_file()
 
