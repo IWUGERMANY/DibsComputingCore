@@ -47,6 +47,7 @@ class DIBS:
         result, result_output = extracted_method_to_simulate_one_building(
             simulator, t_set_heating_temp)
         simulation_time = time.time() - time_begin
+        print(f'DIBS CALCULATION TIME: {simulation_time}')
         return simulation_time, result, SummaryResult(result_output, user_args)
 
     def initialize_data(self):
