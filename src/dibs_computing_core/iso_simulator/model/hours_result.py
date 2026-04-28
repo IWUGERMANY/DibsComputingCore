@@ -99,6 +99,8 @@ class Result:
         Returns:
             None
         """
+        windows = all_windows
+
         self.heating_demand.append(building.heating_demand)
         self.heating_energy.append(building.heating_energy)
         self.heating_sys_electricity.append(building.heating_sys_electricity)
@@ -115,10 +117,10 @@ class Result:
         self.outside_temp.append(t_out)
         self.lighting_demand.append(building.lighting_demand)
         self.internal_gains.append(internal_gains)
-        self.solar_gains_south_window.append(all_windows[0].solar_gains)
-        self.solar_gains_east_window.append(all_windows[1].solar_gains)
-        self.solar_gains_west_window.append(all_windows[2].solar_gains)
-        self.solar_gains_north_window.append(all_windows[3].solar_gains)
+        self.solar_gains_south_window.append(windows[0].solar_gains)
+        self.solar_gains_east_window.append(windows[1].solar_gains)
+        self.solar_gains_west_window.append(windows[2].solar_gains)
+        self.solar_gains_north_window.append(windows[3].solar_gains)
         self.solar_gains_total.append(solar_gains_all_windows)
         self.DayTime.append(hour % 24)
         self.appliance_gains_demand.append(appliance_gains_demand)
@@ -130,27 +132,29 @@ class Result:
         Returns:
             sum_of_all_results
         """
-        heating_demand_sum = sum(self.heating_demand) / 1000
-        heating_energy_sum = sum(self.heating_energy) / 1000
-        heating_sys_electricity_sum = sum(self.heating_sys_electricity) / 1000
-        heating_sys_fossils_sum = sum(self.heating_sys_fossils) / 1000
-        cooling_demand_sum = sum(self.cooling_demand) / 1000
-        cooling_energy_sum = sum(self.cooling_energy) / 1000
-        cooling_sys_electricity_sum = sum(self.cooling_sys_electricity) / 1000
-        cooling_sys_fossils_sum = sum(self.cooling_sys_fossils) / 1000
-        hot_water_demand_sum = sum(self.all_hot_water_demand) / 1000
-        hot_water_energy_sum = sum(self.all_hot_water_energy) / 1000
-        hot_water_sys_electricity_sum = sum(self.hot_water_sys_electricity) / 1000
-        hot_water_sys_fossils_sum = sum(self.hot_water_sys_fossils) / 1000
-        internal_gains_sum = sum(self.internal_gains) / 1000
-        appliance_gains_demand_sum = sum(self.appliance_gains_demand) / 1000
-        appliance_gains_elt_demand_sum = sum(self.appliance_gains_elt_demand) / 1000
-        lighting_demand_sum = sum(self.lighting_demand) / 1000
-        solar_gains_south_window_sum = sum(self.solar_gains_south_window) / 1000
-        solar_gains_east_window_sum = sum(self.solar_gains_east_window) / 1000
-        solar_gains_west_window_sum = sum(self.solar_gains_west_window) / 1000
-        solar_gains_north_window_sum = sum(self.solar_gains_north_window) / 1000
-        solar_gains_total_sum = sum(self.solar_gains_total) / 1000
+        scale = 0.001
+
+        heating_demand_sum = sum(self.heating_demand) * scale
+        heating_energy_sum = sum(self.heating_energy) * scale
+        heating_sys_electricity_sum = sum(self.heating_sys_electricity) * scale
+        heating_sys_fossils_sum = sum(self.heating_sys_fossils) * scale
+        cooling_demand_sum = sum(self.cooling_demand) * scale
+        cooling_energy_sum = sum(self.cooling_energy) * scale
+        cooling_sys_electricity_sum = sum(self.cooling_sys_electricity) * scale
+        cooling_sys_fossils_sum = sum(self.cooling_sys_fossils) * scale
+        hot_water_demand_sum = sum(self.all_hot_water_demand) * scale
+        hot_water_energy_sum = sum(self.all_hot_water_energy) * scale
+        hot_water_sys_electricity_sum = sum(self.hot_water_sys_electricity) * scale
+        hot_water_sys_fossils_sum = sum(self.hot_water_sys_fossils) * scale
+        internal_gains_sum = sum(self.internal_gains) * scale
+        appliance_gains_demand_sum = sum(self.appliance_gains_demand) * scale
+        appliance_gains_elt_demand_sum = sum(self.appliance_gains_elt_demand) * scale
+        lighting_demand_sum = sum(self.lighting_demand) * scale
+        solar_gains_south_window_sum = sum(self.solar_gains_south_window) * scale
+        solar_gains_east_window_sum = sum(self.solar_gains_east_window) * scale
+        solar_gains_west_window_sum = sum(self.solar_gains_west_window) * scale
+        solar_gains_north_window_sum = sum(self.solar_gains_north_window) * scale
+        solar_gains_total_sum = sum(self.solar_gains_total) * scale
 
         return CalculationOfSum(
             heating_demand_sum,

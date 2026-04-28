@@ -68,7 +68,6 @@ def extracted_method_to_simulate_one_building(simulator: BuildingSimulator, t_se
         tuple[Result, ResultOutput]
 
     """
-    print(f'Building mit ID {simulator.datasource.building.scr_gebaeude_id} wird berechnet: ')
     result = Result()
 
     simulator.check_energy_area_and_heating()
@@ -83,58 +82,106 @@ def extracted_method_to_simulate_one_building(simulator: BuildingSimulator, t_se
     tek_dhw, tek_name = simulator.get_tek()
     tek_dhw_per_occupancy_full_usage_hour = tek_dhw / occupancy_full_usage_hours
     t_m_prev = simulator.datasource.building.t_start
+    building = simulator.datasource.building
+    max_occupancy = building.max_occupancy
+    energy_ref_area = building.energy_ref_area
+    appliance_gains_elt = -1 * appliance_gains / 2 if appliance_gains < 0 else appliance_gains
+    people_heat_gain_factor = max_occupancy * gain_per_person
+    appliance_gains_area_factor = appliance_gains * energy_ref_area
+    appliance_gains_elt_area_factor = appliance_gains_elt * energy_ref_area
+
+    building.t_set_heating = t_set_heating_temp
+
+    extract_outdoor_temperature = simulator.extract_outdoor_temperature
+    calc_altitude_and_azimuth = simulator.calc_altitude_and_azimuth
+    set_t_air_based_on_hour = simulator.set_t_air_based_on_hour
+    calc_window_gains_and_illuminance = simulator.calc_window_gains_and_illuminance_for_all_windows
+    calc_energy_demand_for_time_step = simulator.calc_energy_demand_for_time_step
+    calc_hot_water_usage = simulator.calc_hot_water_usage
+    all_windows = simulator.all_windows
+    # A2 hot-path optimization: bind target list-appends once and append directly
+    # instead of calling Result.append_results(...) 8760 times.
+    append_heating_demand = result.heating_demand.append
+    append_heating_energy = result.heating_energy.append
+    append_heating_sys_electricity = result.heating_sys_electricity.append
+    append_heating_sys_fossils = result.heating_sys_fossils.append
+    append_cooling_demand = result.cooling_demand.append
+    append_cooling_energy = result.cooling_energy.append
+    append_cooling_sys_electricity = result.cooling_sys_electricity.append
+    append_cooling_sys_fossils = result.cooling_sys_fossils.append
+    append_all_hot_water_demand = result.all_hot_water_demand.append
+    append_all_hot_water_energy = result.all_hot_water_energy.append
+    append_hot_water_sys_electricity = result.hot_water_sys_electricity.append
+    append_hot_water_sys_fossils = result.hot_water_sys_fossils.append
+    append_temp_air = result.temp_air.append
+    append_outside_temp = result.outside_temp.append
+    append_lighting_demand = result.lighting_demand.append
+    append_internal_gains = result.internal_gains.append
+    append_solar_gains_south_window = result.solar_gains_south_window.append
+    append_solar_gains_east_window = result.solar_gains_east_window.append
+    append_solar_gains_west_window = result.solar_gains_west_window.append
+    append_solar_gains_north_window = result.solar_gains_north_window.append
+    append_solar_gains_total = result.solar_gains_total.append
+    append_day_time = result.DayTime.append
+    append_appliance_gains_demand = result.appliance_gains_demand.append
+    append_appliance_gains_elt_demand = result.appliance_gains_elt_demand.append
+    calc_h_ve_adj = building.calc_h_ve_adj
+    solve_building_lighting = building.solve_building_lighting
+    calc_hot_water_usage_with_schedule = calc_hot_water_usage
+    occupancy_schedule_local = occupancy_schedule
+    tek_dhw_per_hour = tek_dhw_per_occupancy_full_usage_hour
+    window_south = all_windows[0]
+    window_east = all_windows[1]
+    window_west = all_windows[2]
+    window_north = all_windows[3]
+    has_dhw = building.dhw_system not in ["NoDHW", " -"]
+    central_heating_or_dhw = simulator.check_if_central_heating_or_central_dhw()
+    heat_pump_air_or_ground = simulator.check_if_heat_pump_air_or_ground_source()
 
     for hour in range(8760):
-        simulator.datasource.building.t_set_heating = t_set_heating_temp
-        t_out = simulator.extract_outdoor_temperature(hour)
+        schedule_hour = occupancy_schedule_local[hour]
+        people = schedule_hour.People
+        appliances = schedule_hour.Appliances
 
-        altitude, azimuth = simulator.calc_altitude_and_azimuth(hour)
+        t_out = extract_outdoor_temperature(hour)
 
-        simulator.datasource.building.h_ve_adj = (
-            simulator.datasource.building.calc_h_ve_adj(
+        altitude, azimuth = calc_altitude_and_azimuth(hour)
+
+        building.h_ve_adj = (
+            calc_h_ve_adj(
                 hour, t_out, usage_start, usage_end
             )
         )
 
-        t_air = simulator.set_t_air_based_on_hour(hour)
+        t_air = set_t_air_based_on_hour(hour)
 
-        simulator.calc_solar_gains_for_all_windows(
-            altitude, azimuth, t_air, hour
+        solar_gains_all_windows, transmitted_illuminance_sum = calc_window_gains_and_illuminance(
+            altitude, azimuth, t_air, hour, people > 0
         )
-        simulator.calc_illuminance_for_all_windows(altitude, azimuth, hour)
 
-        occupancy_percent = occupancy_schedule[hour].People
-        occupancy = simulator.calc_occupancy(occupancy_schedule, hour)
-
-        simulator.datasource.building.solve_building_lighting(
-            simulator.calc_sum_illuminance_all_windows(), occupancy_percent
+        solve_building_lighting(
+            transmitted_illuminance_sum, people
         )
-        internal_gains = simulator.calc_gains_from_occupancy_and_appliances(
-            occupancy_schedule,
-            occupancy,
-            gain_per_person,
-            appliance_gains,
-            hour,
+        appliance_gains_demand = appliance_gains_area_factor * appliances
+        internal_gains = (
+                people * people_heat_gain_factor
+                + appliance_gains_demand
+                + building.lighting_demand
         )
 
         """
         Calculate appliance_gains as part of the internal_gains
         """
-        appliance_gains_demand = simulator.calc_appliance_gains_demand(
-            occupancy_schedule, appliance_gains, hour
-        )
         """
         Appliance_gains equal the electric energy that appliances use, except for negative appliance_gains of refrigerated counters in trade buildings for food!
         The assumption is: negative appliance_gains come from referigerated counters with heat pumps for which we assume a COP = 2.
         """
-        appliance_gains_demand_elt = simulator.get_appliance_gains_elt_demand(
-            occupancy_schedule, appliance_gains, hour
-        )
+        appliance_gains_demand_elt = appliance_gains_elt_area_factor * appliances
         """
         Calculate energy demand for the time step
         """
-        simulator.calc_energy_demand_for_time_step(
-            internal_gains, t_out, t_m_prev
+        calc_energy_demand_for_time_step(
+            internal_gains, t_out, t_m_prev, solar_gains_all_windows
         )
         """
         Calculate hot water usage of the building for the time step with (BuildingInstance.heating_energy
@@ -146,31 +193,47 @@ def extracted_method_to_simulate_one_building(simulator: BuildingSimulator, t_se
             hot_water_energy,
             hot_water_sys_electricity,
             hot_water_sys_fossils,
-        ) = simulator.calc_hot_water_usage(
-            occupancy_schedule, tek_dhw_per_occupancy_full_usage_hour, hour
+        ) = calc_hot_water_usage_with_schedule(
+            occupancy_schedule_local,
+            tek_dhw_per_hour,
+            hour,
+            people,
+            has_dhw,
+            central_heating_or_dhw,
+            heat_pump_air_or_ground,
         )
 
         """
         Set the previous temperature for the next time step
         """
-        t_m_prev = simulator.datasource.building.t_m_next
+        t_m_prev = building.t_m_next
         """
         Append results to the created lists 
         """
-        result.append_results(
-            simulator.datasource.building,
-            simulator.all_windows,
-            hot_water_demand,
-            hot_water_energy,
-            hot_water_sys_electricity,
-            hot_water_sys_fossils,
-            t_out,
-            internal_gains,
-            appliance_gains_demand,
-            appliance_gains_demand_elt,
-            simulator.calc_sum_solar_gains_all_windows(),
-            hour,
-        )
+        append_heating_demand(building.heating_demand)
+        append_heating_energy(building.heating_energy)
+        append_heating_sys_electricity(building.heating_sys_electricity)
+        append_heating_sys_fossils(building.heating_sys_fossils)
+        append_cooling_demand(building.cooling_demand)
+        append_cooling_energy(building.cooling_energy)
+        append_cooling_sys_electricity(building.cooling_sys_electricity)
+        append_cooling_sys_fossils(building.cooling_sys_fossils)
+        append_all_hot_water_demand(hot_water_demand)
+        append_all_hot_water_energy(hot_water_energy)
+        append_hot_water_sys_electricity(hot_water_sys_electricity)
+        append_hot_water_sys_fossils(hot_water_sys_fossils)
+        append_temp_air(building.t_air)
+        append_outside_temp(t_out)
+        append_lighting_demand(building.lighting_demand)
+        append_internal_gains(internal_gains)
+        append_solar_gains_south_window(window_south.solar_gains)
+        append_solar_gains_east_window(window_east.solar_gains)
+        append_solar_gains_west_window(window_west.solar_gains)
+        append_solar_gains_north_window(window_north.solar_gains)
+        append_solar_gains_total(solar_gains_all_windows)
+        append_day_time(hour % 24)
+        append_appliance_gains_demand(appliance_gains_demand)
+        append_appliance_gains_elt_demand(appliance_gains_demand_elt)
         """
         Some calculations used for the console prints
         """

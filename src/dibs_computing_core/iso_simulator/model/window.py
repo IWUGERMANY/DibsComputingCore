@@ -13,10 +13,16 @@ class Window:
     ):
         self.alititude_tilt_rad = math.radians(alititude_tilt)
         self.azimuth_tilt_rad = math.radians(azimuth_tilt)
+        self._sin_altitude_tilt = math.sin(self.alititude_tilt_rad)
+        self._cos_altitude_tilt = math.cos(self.alititude_tilt_rad)
+        self._diffuse_solar_factor = (1 + self._cos_altitude_tilt) / 2
         self.glass_solar_transmittance = glass_solar_transmittance
         self.glass_light_transmittance = glass_light_transmittance
         self.area = area
         self.glass_solar_shading_transmittance = glass_solar_shading_transmittance
+        self._last_sun_altitude = None
+        self._last_sun_azimuth = None
+        self._last_direct_factor = None
 
     def calc_solar_gains(
             self,
@@ -81,7 +87,7 @@ class Window:
             sun_altitude,
             sun_azimuth,
         )
-        diffuse_factor = self.calc_diffuse_solar_factor()
+        diffuse_factor = self._diffuse_solar_factor
 
         direct_solar = direct_factor * normal_direct_radiation
         diffuse_solar = horizontal_diffuse_radiation * diffuse_factor
@@ -91,8 +97,7 @@ class Window:
         """
         Calculates the proportion of diffuse radiation
         """
-        # Proportion of incident light on the window surface
-        return (1 + math.cos(self.alititude_tilt_rad)) / 2
+        return self._diffuse_solar_factor
 
     def calc_illuminance(
             self,
@@ -116,12 +121,19 @@ class Window:
         :return: self.transmitted_illuminance - Illuminance in building after transmitting through the window [Lumens]
         :rtype: float
         """
-
-        direct_factor = self.calc_direct_solar_factor(
-            sun_altitude,
-            sun_azimuth,
-        )
-        diffuse_factor = self.calc_diffuse_solar_factor()
+        # Reuse direct factor from calc_solar_gains within the same hour/window pass.
+        # Fallback remains for standalone illuminance calls.
+        if (
+            self._last_sun_altitude == sun_altitude
+            and self._last_sun_azimuth == sun_azimuth
+        ):
+            direct_factor = self._last_direct_factor
+        else:
+            direct_factor = self.calc_direct_solar_factor(
+                sun_altitude,
+                sun_azimuth,
+            )
+        diffuse_factor = self._diffuse_solar_factor
 
         direct_illuminance = direct_factor * normal_direct_illuminance
         diffuse_illuminance = diffuse_factor * horizontal_diffuse_illuminance
@@ -139,22 +151,30 @@ class Window:
         """
         Calculates the cosine of the angle of incidence on the window
         """
+        if (
+            self._last_sun_altitude == sun_altitude
+            and self._last_sun_azimuth == sun_azimuth
+        ):
+            return self._last_direct_factor
+
         sun_altitude_rad = math.radians(sun_altitude)
         sun_azimuth_rad = math.radians(sun_azimuth)
 
         # Proportion of the radiation incident on the window (cos of the
         # incident ray)
         # ref:Quaschning, Volker, and Rolf Hanitsch. "Shade calculations in photovoltaic systems." ISES Solar World Conference, Harare. 1995.
-        direct_factor = math.cos(sun_altitude_rad) * math.sin(
-            self.alititude_tilt_rad
-        ) * math.cos(sun_azimuth_rad - self.azimuth_tilt_rad) + math.sin(
-            sun_altitude_rad
-        ) * math.cos(
-            self.alititude_tilt_rad
+        direct_factor = (
+            math.cos(sun_altitude_rad)
+            * self._sin_altitude_tilt
+            * math.cos(sun_azimuth_rad - self.azimuth_tilt_rad)
+            + math.sin(sun_altitude_rad) * self._cos_altitude_tilt
         )
 
-        # If the sun is in front of the window surface
-        if math.degrees(math.acos(direct_factor)) > 90:
+        # Equivalent to previous angle check (>90 deg) without acos/degrees overhead.
+        if direct_factor <= 0:
             direct_factor = 0
 
+        self._last_sun_altitude = sun_altitude
+        self._last_sun_azimuth = sun_azimuth
+        self._last_direct_factor = direct_factor
         return direct_factor

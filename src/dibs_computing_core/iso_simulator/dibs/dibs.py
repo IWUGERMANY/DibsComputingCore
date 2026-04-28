@@ -9,9 +9,14 @@ from dibs_computing_core.iso_simulator.model.summary_result import SummaryResult
 from dibs_computing_core.iso_simulator.model.building import Building
 import time
 import multiprocessing
+import logging
+from time import perf_counter
 from typing import List
 
 from .dibs_utils.dibs_auxiliary_functions import extracted_method_to_simulate_one_building, unpack_results
+
+
+logger = logging.getLogger(__name__)
 
 
 class DIBS:
@@ -34,20 +39,30 @@ class DIBS:
         Returns:
 
         """
+        total_started = perf_counter()
 
         user_args = self.get_user_args()
 
+        started = perf_counter()
         self.initialize_data()
+        logger.info("SIM_PERF dibs phase=initialize_data duration_s=%.4f", perf_counter() - started)
 
+        started = perf_counter()
         simulator = BuildingSimulator(self.datasource)
+        logger.info("SIM_PERF dibs phase=simulator_init duration_s=%.4f", perf_counter() - started)
 
         t_set_heating_temp = simulator.datasource.building.t_set_heating
-        time_begin = time.time()
+        started = perf_counter()
         result, result_output = extracted_method_to_simulate_one_building(
             simulator, t_set_heating_temp)
-        simulation_time = time.time() - time_begin
-        print(f'DIBS CALCULATION TIME: {simulation_time}')
-        return simulation_time, result, SummaryResult(result_output, user_args)
+        simulation_time = perf_counter() - started
+        logger.info("SIM_PERF dibs phase=simulate_hours duration_s=%.4f", simulation_time)
+
+        started = perf_counter()
+        summary_result = SummaryResult(result_output, user_args)
+        logger.info("SIM_PERF dibs phase=summary_wrap duration_s=%.4f", perf_counter() - started)
+        logger.info("SIM_PERF dibs phase=total duration_s=%.4f", perf_counter() - total_started)
+        return simulation_time, result, summary_result
 
     def initialize_data(self):
         self.datasource.get_user_building()

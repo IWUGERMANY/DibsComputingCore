@@ -32,6 +32,16 @@ class BuildingSimulator:
         self.datasource = datasource
         self.all_windows = self.build_windows_objects()
         self.weather_data = self.get_weather_data()
+        self._sun_positions = self._precompute_sun_positions()
+
+    def _precompute_sun_positions(self) -> list[tuple[float, float]]:
+        location = Location()
+        latitude = self.datasource.epw_file.coordinates_station[0]
+        longitude = self.datasource.epw_file.coordinates_station[1]
+        return [
+            location.calc_sun_position(latitude, longitude, hour_data.year, hour)
+            for hour, hour_data in enumerate(self.weather_data)
+        ]
 
     def check_energy_area_and_heating(self):
         """
@@ -217,6 +227,8 @@ class BuildingSimulator:
         Return type
             Tuple[float, float]
         """
+        if 0 <= hour < len(self._sun_positions):
+            return self._sun_positions[hour]
         location = Location()
         return location.calc_sun_position(
             self.datasource.epw_file.coordinates_station[0],
@@ -278,12 +290,16 @@ class BuildingSimulator:
 
         """
 
+        hour_weather = self.weather_data[hour]
+        dirnorrad = hour_weather.dirnorrad_Whm2
+        difhorrad = hour_weather.difhorrad_Whm2
+
         for element in self.all_windows:
             element.calc_solar_gains(
                 sun_altitude,
                 sun_azimuth,
-                self.weather_data[hour].dirnorrad_Whm2,
-                self.weather_data[hour].difhorrad_Whm2,
+                dirnorrad,
+                difhorrad,
                 t_air,
                 hour,
             )
@@ -303,14 +319,60 @@ class BuildingSimulator:
 
         """
 
+        hour_weather = self.weather_data[hour]
+        dirnorillum = hour_weather.dirnorillum_lux
+        difhorillum = hour_weather.difhorillum_lux
+
         for element in self.all_windows:
             element.calc_illuminance(
                 sun_altitude,
                 sun_azimuth,
-                self.weather_data[hour].dirnorillum_lux,
-                self.weather_data[hour].difhorillum_lux,
+                dirnorillum,
+                difhorillum,
             )
 
+
+    def calc_window_gains_and_illuminance_for_all_windows(
+            self,
+            sun_altitude: float,
+            sun_azimuth: float,
+            t_air: float,
+            hour: int,
+            calculate_illuminance: bool = True,
+    ) -> tuple[float, float]:
+        """Calculate solar gains + illuminance for all windows in one pass and return both sums."""
+        hour_weather = self.weather_data[hour]
+        dirnorrad = hour_weather.dirnorrad_Whm2
+        difhorrad = hour_weather.difhorrad_Whm2
+        if calculate_illuminance:
+            dirnorillum = hour_weather.dirnorillum_lux
+            difhorillum = hour_weather.difhorillum_lux
+
+        solar_gains_sum = 0.0
+        transmitted_illuminance_sum = 0.0
+
+        for element in self.all_windows:
+            element.calc_solar_gains(
+                sun_altitude,
+                sun_azimuth,
+                dirnorrad,
+                difhorrad,
+                t_air,
+                hour,
+            )
+            if calculate_illuminance:
+                element.calc_illuminance(
+                    sun_altitude,
+                    sun_azimuth,
+                    dirnorillum,
+                    difhorillum,
+                )
+            else:
+                element.transmitted_illuminance = 0.0
+            solar_gains_sum += element.solar_gains
+            transmitted_illuminance_sum += element.transmitted_illuminance
+
+        return solar_gains_sum, transmitted_illuminance_sum
     def calc_occupancy(
             self, occupancy_schedule: List[ScheduleName], hour: int
     ) -> float:
@@ -445,7 +507,11 @@ class BuildingSimulator:
         return sum(element.solar_gains for element in self.all_windows)
 
     def calc_energy_demand_for_time_step(
-            self, internal_gains: float, t_out: float, t_m_prev: float
+            self,
+            internal_gains: float,
+            t_out: float,
+            t_m_prev: float,
+            solar_gains_sum: float | None = None,
     ) -> None:
         """
         Calculate energy demand for the time step
@@ -458,8 +524,10 @@ class BuildingSimulator:
             None
 
         """
+        if solar_gains_sum is None:
+            solar_gains_sum = self.calc_sum_solar_gains_all_windows()
         self.datasource.building.solve_building_energy(
-            internal_gains, self.calc_sum_solar_gains_all_windows(), t_out, t_m_prev
+            internal_gains, solar_gains_sum, t_out, t_m_prev
         )
 
     def check_if_central_heating_or_central_dhw(self) -> bool:
@@ -491,6 +559,10 @@ class BuildingSimulator:
             occupancy_schedule: List[ScheduleName],
             tek_dhw_per_occupancy_full_usage_hour: float,
             hour: int,
+            people_share: float | None = None,
+            has_dhw: bool | None = None,
+            central_heating_or_dhw: bool | None = None,
+            heat_pump_air_or_ground: bool | None = None,
     ) -> Tuple[float, float, float, float]:
         """
         Calculate hot water usage of the building for the time step with (self.datasource.building.heating_energy /
@@ -507,9 +579,14 @@ class BuildingSimulator:
             Tuple[float, float, float, float]
 
         """
-        if self.datasource.building.dhw_system not in ["NoDHW", " -"]:
+        if has_dhw is None:
+            has_dhw = self.datasource.building.dhw_system not in ["NoDHW", " -"]
+        if has_dhw:
+            if people_share is None:
+                people_share = occupancy_schedule[hour].People
+
             hot_water_demand = (
-                    occupancy_schedule[hour].People
+                    people_share
                     * tek_dhw_per_occupancy_full_usage_hour
                     * 1000
                     * self.datasource.building.energy_ref_area
@@ -523,9 +600,13 @@ class BuildingSimulator:
             else:
                 hot_water_energy = hot_water_demand
 
+            if central_heating_or_dhw is None:
+                central_heating_or_dhw = self.check_if_central_heating_or_central_dhw()
+            if heat_pump_air_or_ground is None:
+                heat_pump_air_or_ground = self.check_if_heat_pump_air_or_ground_source()
+
             if self.datasource.building.dhw_system == "DecentralElectricDHW" or (
-                    self.check_if_central_heating_or_central_dhw()
-                    and self.check_if_heat_pump_air_or_ground_source()
+                    central_heating_or_dhw and heat_pump_air_or_ground
             ):
                 hot_water_sys_electricity = hot_water_energy
                 hot_water_sys_fossils = 0

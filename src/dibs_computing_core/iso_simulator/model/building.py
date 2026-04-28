@@ -326,6 +326,7 @@ class Building(object):
         self.max_cooling_energy = max_cooling_energy_per_floor_area * energy_ref_area
         # max heating load (W/m2)
         self.max_heating_energy = max_heating_energy_per_floor_area * energy_ref_area
+        self._energy_floor_ax10 = 10 * energy_ref_area
 
         ## Building System Properties
         self.heating_supply_system = heating_supply_system
@@ -613,10 +614,6 @@ class Building(object):
 
             # Calculates energy_demand used below
             self.calc_energy_demand(internal_gains, solar_gains, t_out, t_m_prev)
-
-            self.calc_temperatures_crank_nicolson(
-                self.energy_demand, internal_gains, solar_gains, t_out, t_m_prev
-            )
             # calculates the actual t_m resulting from the actual heating
             # demand (energy_demand)
 
@@ -626,17 +623,7 @@ class Building(object):
                 SupplyDirector()
             )  # Initialise Heating System Manager
 
-            def is_none_or_nan(x):
-                return x is None or (isinstance(x, float) and math.isnan(x))
-
             if self.has_heating_demand:
-
-                for name, value in [('energy_demand', self.energy_demand), ('t_out', t_out),
-                                    ('heating_supply_temperature', self.heating_supply_temperature),
-                                    ('cooling_supply_temperature', self.cooling_supply_temperature)]:
-                    if is_none_or_nan(value):
-                        print(f"bd_is is : {self.scr_gebaeude_id}, {name} ist: {value}")
-
                 my_system = self.supply_mapping[self.heating_supply_system](
                     load=self.energy_demand,
                     t_out=t_out,
@@ -707,10 +694,11 @@ class Building(object):
 
         # If the air temperature is less or greater than the set temperature,
         # there is a heating/cooling load
-        if round(self.t_air, 1) < self.t_set_heating:
+        t_air_rounded = round(self.t_air, 1)
+        if t_air_rounded < self.t_set_heating:
             self.has_heating_demand = True
             self.has_cooling_demand = False
-        elif round(self.t_air, 1) > self.t_set_cooling:
+        elif t_air_rounded > self.t_set_cooling:
             self.has_cooling_demand = True
             self.has_heating_demand = False
         else:
@@ -750,10 +738,6 @@ class Building(object):
         Used in: solve_building_energy()
         # Step 1 - Step 4 in Section C.4.2 in [C.3 ISO 13790]
         """
-        if self.scr_gebaeude_id == "HB-2024-7810":
-            print(f"Start of execution of method calc_energy_demand().")
-            print(
-                f"internal gains is: {internal_gains}, solar_gains is: {solar_gains}, t_out ist: {t_out}, t_m_prev is: {t_m_prev}.")
         # Step 1: Check if heating or cooling is needed
         # (Not needed, but doing so for readability when comparing with the standard)
         # Set heating/cooling to 0
@@ -762,19 +746,13 @@ class Building(object):
         t_air_0 = self.calc_temperatures_crank_nicolson(
             energy_demand_0, internal_gains, solar_gains, t_out, t_m_prev
         )[1]
-        if self.scr_gebaeude_id == "HB-2024-7810":
-            print(f"t_air_0  is: {t_air_0}.")
         # Step 2: Calculate the unrestricted heating/cooling required
 
         # determine if we need heating or cooling based based on the condition
         # that no heating or cooling is required
         if self.has_heating_demand:
-            if self.scr_gebaeude_id == "HB-2024-7810":
-                print(f"has_heating_demand is TRUE.")
             t_air_set = self.t_set_heating
         elif self.has_cooling_demand:
-            if self.scr_gebaeude_id == "HB-2024-7810":
-                print(f"has_heating_demand not TRUE and has_cooling_demand is TRUE.")
             t_air_set = self.t_set_cooling
         else:
             raise NameError(
@@ -783,9 +761,7 @@ class Building(object):
 
         # Set a heating case where the heating load is 10x the energy_ref_area (10
         # W/m2)
-        energy_floorAx10 = 10 * self.energy_ref_area
-        if self.scr_gebaeude_id == "HB-2024-7810":
-            print(f"energy_floorAx10 is: {energy_floorAx10}.")
+        energy_floorAx10 = self._energy_floor_ax10
 
         # Calculate the air temperature obtained by having this 10 W/m2
         # setpoint
@@ -793,15 +769,10 @@ class Building(object):
             energy_floorAx10, internal_gains, solar_gains, t_out, t_m_prev
         )[1]
 
-        if self.scr_gebaeude_id == "HB-2024-7810":
-            print(f"t_air_10 is: {t_air_10}.")
         # Determine the unrestricted heating/cooling of the building
         self.calc_energy_demand_unrestricted(
             energy_floorAx10, t_air_set, t_air_0, t_air_10
         )
-
-        if self.scr_gebaeude_id == "HB-2024-7810":
-            print(f"t_air_set is: {t_air_set}, energy_demand_unrestricted is {self.energy_demand_unrestricted}.")
 
         # Step 3: Check if available heating or cooling power is sufficient
         # If max_cooling_energy_per_floor_area is set so -inf and
@@ -811,14 +782,10 @@ class Building(object):
                 <= self.energy_demand_unrestricted
                 <= self.max_heating_energy
         ):
-            if self.scr_gebaeude_id == "HB-2024-7810":
-                print(f"max_cooling_energy <= energy_demand_unrestricted <= max_heating_energy is TRUE.")
             self.energy_demand = self.energy_demand_unrestricted
             self.t_air_ac = (
                 t_air_set  # not sure what this is used for at this stage TODO
             )
-            if self.scr_gebaeude_id == "HB-2024-7810":
-                print(f"self.energy_demand is: {self.energy_demand}, t_air_ac is: {self.t_air_ac}")
 
         # Step 4: if not sufficient then set the heating/cooling setting to the
         # maximum
@@ -831,11 +798,6 @@ class Building(object):
             self.energy_demand = self.max_cooling_energy
 
         else:
-            print(
-                f"Building ID is: {self.scr_gebaeude_id}, energy ref area is: {self.energy_ref_area}, heating supply sys is: {self.heating_supply_system}, cooling supply sys is: {self.cooling_supply_system}.")
-            if self.scr_gebaeude_id == "HB-2024-7810":
-                print(
-                    f"max_cooling_energy is: {self.max_cooling_energy}, energy_demand_unrestricted is: {self.energy_demand_unrestricted}, max_heating_energy is: {self.max_heating_energy}.")
             self.energy_demand = 0
             raise ValueError("unknown radiative heating/cooling system status")
 
@@ -858,8 +820,6 @@ class Building(object):
         From this we can determine the heating level required to achieve the set point temperature
         This assumes a perfect HVAC control system
         """
-        if (t_air_10 - t_air_0) == 0:
-            print(f"(t_air_10 - t_air_0) == 0 >> ID is {self.scr_gebaeude_id}.")
         self.energy_demand_unrestricted = (
                 energy_floorAx10 * (t_air_set - t_air_0) / (t_air_10 - t_air_0)
         )
@@ -920,12 +880,6 @@ class Building(object):
         Primary Equation, calculates the temperature of the next time step
         # (C.4) in [C.3 ISO 13790]
         """
-        if self.scr_gebaeude_id == "HB-2024-7810":
-            print(f"Execution of calc_t_m_next.")
-            print(
-                f"t_m_prev is {t_m_prev}, c_m is {self.c_m}, h_tr_3 is {self.h_tr_3}, h_tr_em is {self.h_tr_em}, phi_m_tot is {self.phi_m_tot} .")
-            print(f"t_m_prev is of type {type(t_m_prev)}.")
-
         act_val1 = (
                 (t_m_prev * ((self.c_m / 3600.0) - 0.5 * (self.h_tr_3 + self.h_tr_em)))
                 + self.phi_m_tot
