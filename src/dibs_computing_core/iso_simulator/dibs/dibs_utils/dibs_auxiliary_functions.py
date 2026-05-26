@@ -3,6 +3,46 @@ from dibs_computing_core.iso_simulator.model.hours_result import Result
 from dibs_computing_core.iso_simulator.model.ResultOutput import ResultOutput
 
 
+def build_heating_period_mask_and_metrics(
+        weather_data,
+        threshold_temperature: float = 12.0,
+        reference_room_temperature: float = 20.0,
+) -> tuple[list[bool], dict]:
+    """
+    Classify heating days from daily mean outdoor temperatures and derive annual metrics.
+    """
+    mask = [False] * len(weather_data)
+    grouped_day_indices = {}
+    grouped_day_temperatures = {}
+
+    for hour_index, hour_weather in enumerate(weather_data):
+        day_key = (hour_weather.year, hour_weather.month, hour_weather.day)
+        grouped_day_indices.setdefault(day_key, []).append(hour_index)
+        grouped_day_temperatures.setdefault(day_key, []).append(hour_weather.drybulb_C)
+
+    heating_days = 0
+    heating_degree_days = 0.0
+    room_heating_degree_days = 0.0
+
+    for day_key, day_temperatures in grouped_day_temperatures.items():
+        daily_mean_temperature = sum(day_temperatures) / len(day_temperatures)
+        is_heating_day = daily_mean_temperature < threshold_temperature
+        if is_heating_day:
+            heating_days += 1
+            heating_degree_days += threshold_temperature - daily_mean_temperature
+            room_heating_degree_days += (
+                    reference_room_temperature - daily_mean_temperature
+            )
+            for hour_index in grouped_day_indices[day_key]:
+                mask[hour_index] = True
+
+    return mask, {
+        "HeatingDays": heating_days,
+        "HeatingDegreeDays": heating_degree_days,
+        "RoomHeatingDegreeDays": room_heating_degree_days,
+    }
+
+
 # def simulate_one_building(datasource: DataSourceCSV):
 #     """
 #     This method simulates the building which located in the given path
@@ -99,6 +139,9 @@ def extracted_method_to_simulate_one_building(simulator: BuildingSimulator, t_se
     calc_energy_demand_for_time_step = simulator.calc_energy_demand_for_time_step
     calc_hot_water_usage = simulator.calc_hot_water_usage
     all_windows = simulator.all_windows
+    heating_period_mask, heating_period_metrics = build_heating_period_mask_and_metrics(
+        simulator.weather_data
+    )
     # A2 hot-path optimization: bind target list-appends once and append directly
     # instead of calling Result.append_results(...) 8760 times.
     append_heating_demand = result.heating_demand.append
@@ -125,6 +168,14 @@ def extracted_method_to_simulate_one_building(simulator: BuildingSimulator, t_se
     append_day_time = result.DayTime.append
     append_appliance_gains_demand = result.appliance_gains_demand.append
     append_appliance_gains_elt_demand = result.appliance_gains_elt_demand.append
+    append_transmission_loss = result.transmission_loss.append
+    append_ventilation_loss = result.ventilation_loss.append
+    append_is_heating_period_hour = result.is_heating_period_hour.append
+    append_occupancy_profile_people = result.occupancy_profile_people.append
+    append_appliance_profile_factor = result.appliance_profile_factor.append
+    append_air_change_rate_effective = result.air_change_rate_effective.append
+    append_air_flow_rate_effective = result.air_flow_rate_effective.append
+    append_electricity_demand_total = result.electricity_demand_total.append
     calc_h_ve_adj = building.calc_h_ve_adj
     solve_building_lighting = building.solve_building_lighting
     calc_hot_water_usage_with_schedule = calc_hot_water_usage
@@ -207,6 +258,23 @@ def extracted_method_to_simulate_one_building(simulator: BuildingSimulator, t_se
         Set the previous temperature for the next time step
         """
         t_m_prev = building.t_m_next
+        air_change_rate_effective = 0.0
+        if building.building_vol:
+            air_change_rate_effective = (
+                    building.h_ve_adj * 3600 / (1200 * building.building_vol)
+            )
+        air_flow_rate_effective = air_change_rate_effective * building.building_vol
+        transmission_loss = max(
+            0.0, (building.h_tr_op + building.h_tr_w) * (building.t_air - t_out)
+        )
+        ventilation_loss = max(0.0, building.h_ve_adj * (building.t_air - t_out))
+        electricity_demand_total = (
+                building.heating_sys_electricity
+                + hot_water_sys_electricity
+                + building.cooling_sys_electricity
+                + building.lighting_demand
+                + appliance_gains_demand_elt
+        )
         """
         Append results to the created lists 
         """
@@ -234,10 +302,18 @@ def extracted_method_to_simulate_one_building(simulator: BuildingSimulator, t_se
         append_day_time(hour % 24)
         append_appliance_gains_demand(appliance_gains_demand)
         append_appliance_gains_elt_demand(appliance_gains_demand_elt)
+        append_transmission_loss(transmission_loss)
+        append_ventilation_loss(ventilation_loss)
+        append_is_heating_period_hour(heating_period_mask[hour])
+        append_occupancy_profile_people(people)
+        append_appliance_profile_factor(appliances)
+        append_air_change_rate_effective(air_change_rate_effective)
+        append_air_flow_rate_effective(air_flow_rate_effective)
+        append_electricity_demand_total(electricity_demand_total)
         """
         Some calculations used for the console prints
         """
-    sum_of_all_results = result.calc_sum_of_results()
+    sum_of_all_results = result.calc_sum_of_results(heating_period_metrics)
     """
         the fuel-related final energy sums, f.i. HeatingEnergy_sum, are calculated based upon the superior heating value
         Hs since the corresponding expenditure factors from TEK 9.24 represent the ration of Hs-related final energy to 

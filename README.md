@@ -14,6 +14,21 @@ To install the package, use the following command:
 pip install dibs_computing_core==1.0.0
 ```
 
+## Diagnostic outputs
+
+The computing core now exposes additional annual and hourly diagnostics that can
+be exported by `dibs_cli`:
+
+- transmission losses
+- ventilation losses
+- heating-period-only sums for demand, gains, and losses
+- heating-day weather metrics derived from daily mean EPW temperatures
+- annual and heating-period mean occupancy/appliance schedule factors
+- annual and heating-period mean effective air exchange rates and flows
+
+The heating period is defined as all hours belonging to days with a daily mean
+outdoor temperature below `12.0 C`.
+
 ## Further information
 
 For a detailed installation guide and further information on DIBS see the [wiki](https://github.com/IWUGERMANY/DIBS---Dynamic-ISO-Building-Simulator/wiki)
