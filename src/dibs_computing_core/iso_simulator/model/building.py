@@ -55,6 +55,8 @@ class Building(object):
     u_walls: U value of external walls  [W/m2K]
     u_roof: U value of the roof [W/m2K]
     u_base: U value of the floor [W/m2K]
+    delta_u_thermal_bridging: Thermal-bridge surcharge applied to the
+        envelope area [W/m2K]
     temp_adj_base: Temperature adjustment factor for the floor
     temp_adj_walls_ug: Temperature adjustment factor for walls below ground
     ach_inf: Air changes per hour through infiltration [Air Changes Per Hour]
@@ -89,6 +91,10 @@ class Building(object):
     c_m: Thermal Capacitance of the medium [J/K]
     h_tr_is: Conductance between the air node and the inside surface node [W/K]
     h_tr_w: Heat transfer coefficient from the outside through windows, doors [W/K]
+    h_tr_tb: Heat transfer coefficient from the outside through thermal
+        bridges [W/K]
+    h_tr_direct: Combined direct heat transfer coefficient through windows,
+        doors, and thermal bridges [W/K]
     h_tr_op: Heat transfer coefficient from the outside through opaque elements [W/K]
     h_tr_em: Conductance between outside node and mass node [W/K]
     h_tr_ms: Conductance between mass node and internal surface node [W/K]
@@ -141,6 +147,7 @@ class Building(object):
             u_walls: float,
             u_roof: float,
             u_base: float,
+            delta_u_thermal_bridging: float,
             temp_adj_base: float,
             temp_adj_walls_ug: float,
             ach_inf: float,
@@ -233,6 +240,7 @@ class Building(object):
         self.window_area = (
                 window_area_north + window_area_east + window_area_south + window_area_west
         )
+        self.envelope_area = envelope_area
         # net room area
         self.net_room_area = net_room_area
         # energy reference area
@@ -293,6 +301,10 @@ class Building(object):
         # Conductance to exterior through glazed surfaces [W/K], based on
         # U-wert of 1W/m2K
         self.h_tr_w = u_windows * self.window_area
+        self.delta_u_thermal_bridging = delta_u_thermal_bridging
+        # TABULA / MOBASY-style thermal-bridge surcharge converted to a
+        # constant conductance for the hourly balance.
+        self.h_tr_tb = self.envelope_area * self.delta_u_thermal_bridging
 
         ## Determine the ventilation conductance
         self.ach_inf = ach_inf
@@ -348,7 +360,16 @@ class Building(object):
         Definition to simplify calc_phi_m_tot
         # (C.7) in [C.3 ISO 13790]
         """
-        return self.h_tr_1 + self.h_tr_w
+        return self.h_tr_1 + self.h_tr_direct
+
+    @property
+    def h_tr_direct(self):
+        """
+        Direct transmission branch from the zone to the outdoor environment.
+        This consists of the glazed/window branch plus the thermal-bridge
+        surcharge branch.
+        """
+        return self.h_tr_w + self.h_tr_tb
 
     @property
     def h_tr_3(self):
@@ -843,7 +864,7 @@ class Building(object):
         self.phi_ia = 0.5 * internal_gains
         # Heat flow to the surface node
         self.phi_st = (
-                              1 - (self.mass_area / self.A_t) - (self.h_tr_w / (9.1 * self.A_t))
+                              1 - (self.mass_area / self.A_t) - (self.h_tr_direct / (9.1 * self.A_t))
                       ) * (0.5 * internal_gains + solar_gains)
         # Heatflow to the thermal mass node
         self.phi_m = (self.mass_area / self.A_t) * (0.5 * internal_gains + solar_gains)
@@ -910,7 +931,7 @@ class Building(object):
                 + self.h_tr_3
                 * (
                         self.phi_st
-                        + self.h_tr_w * t_out
+                        + self.h_tr_direct * t_out
                         + self.h_tr_1 * ((self.phi_ia / self.h_ve_adj) + t_supply)
                 )
                 / self.h_tr_2
@@ -936,9 +957,9 @@ class Building(object):
         self.t_s = (
                            self.h_tr_ms * self.t_m
                            + self.phi_st
-                           + self.h_tr_w * t_out
+                           + self.h_tr_direct * t_out
                            + self.h_tr_1 * (t_supply + self.phi_ia / self.h_ve_adj)
-                   ) / (self.h_tr_ms + self.h_tr_w + self.h_tr_1)
+                   ) / (self.h_tr_ms + self.h_tr_direct + self.h_tr_1)
 
     def calc_t_air(self, t_out):
         """

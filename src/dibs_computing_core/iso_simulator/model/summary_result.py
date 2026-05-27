@@ -118,6 +118,10 @@ class SummaryResult:
         self.solar_gains_north_window = result.sum_object.SolarGainsNorthWindow_sum
         self.transmission_loss = result.sum_object.TransmissionLoss_sum
         self.transmission_loss_surface = surface(self.transmission_loss)
+        self.delta_u_thermal_bridging = result.building.delta_u_thermal_bridging
+        self.thermal_bridge_conductance = result.building.h_tr_tb
+        self.thermal_bridging_loss = result.sum_object.ThermalBridgingLoss_sum
+        self.thermal_bridging_loss_surface = surface(self.thermal_bridging_loss)
         self.ventilation_loss = result.sum_object.VentilationLoss_sum
         self.ventilation_loss_surface = surface(self.ventilation_loss)
 
@@ -208,6 +212,12 @@ class SummaryResult:
         self.heating_period_transmission_loss = result.sum_object.HeatingPeriodTransmissionLoss_sum
         self.heating_period_transmission_loss_surface = surface(
             self.heating_period_transmission_loss
+        )
+        self.heating_period_thermal_bridging_loss = (
+            result.sum_object.HeatingPeriodThermalBridgingLoss_sum
+        )
+        self.heating_period_thermal_bridging_loss_surface = surface(
+            self.heating_period_thermal_bridging_loss
         )
         self.heating_period_ventilation_loss = result.sum_object.HeatingPeriodVentilationLoss_sum
         self.heating_period_ventilation_loss_surface = surface(

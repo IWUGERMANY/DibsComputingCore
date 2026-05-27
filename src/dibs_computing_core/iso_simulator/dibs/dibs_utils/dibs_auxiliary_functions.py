@@ -216,6 +216,7 @@ def extracted_method_to_simulate_one_building(simulator: BuildingSimulator, t_se
     append_appliance_gains_demand = result.appliance_gains_demand.append
     append_appliance_gains_elt_demand = result.appliance_gains_elt_demand.append
     append_transmission_loss = result.transmission_loss.append
+    append_thermal_bridging_loss = result.thermal_bridging_loss.append
     append_ventilation_loss = result.ventilation_loss.append
     append_is_heating_period_hour = result.is_heating_period_hour.append
     append_occupancy_profile_people = result.occupancy_profile_people.append
@@ -318,8 +319,11 @@ def extracted_method_to_simulate_one_building(simulator: BuildingSimulator, t_se
                     building.h_ve_adj * 3600 / (1200 * building.building_vol)
             )
         air_flow_rate_effective = air_change_rate_effective * building.building_vol
+        thermal_bridging_loss = max(
+            0.0, building.h_tr_tb * (building.t_air - t_out)
+        )
         transmission_loss = max(
-            0.0, (building.h_tr_op + building.h_tr_w) * (building.t_air - t_out)
+            0.0, (building.h_tr_op + building.h_tr_direct) * (building.t_air - t_out)
         )
         ventilation_loss = max(0.0, building.h_ve_adj * (building.t_air - t_out))
         electricity_demand_total = (
@@ -357,6 +361,7 @@ def extracted_method_to_simulate_one_building(simulator: BuildingSimulator, t_se
         append_appliance_gains_demand(appliance_gains_demand)
         append_appliance_gains_elt_demand(appliance_gains_demand_elt)
         append_transmission_loss(transmission_loss)
+        append_thermal_bridging_loss(thermal_bridging_loss)
         append_ventilation_loss(ventilation_loss)
         append_is_heating_period_hour(heating_period_mask[hour])
         append_occupancy_profile_people(people)

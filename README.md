@@ -20,6 +20,7 @@ The computing core now exposes additional annual and hourly diagnostics that can
 be exported by `dibs_cli`:
 
 - transmission losses
+- thermal-bridge conductance and losses
 - ventilation losses
 - heating-period-only sums for demand, gains, and losses
 - heating-day weather metrics derived from daily mean EPW temperatures
@@ -30,6 +31,22 @@ be exported by `dibs_cli`:
   - dry-bulb / outside temperature means
 - annual and heating-period mean occupancy/appliance schedule factors
 - annual and heating-period mean effective air exchange rates and flows
+
+Additional thermal-bridge input/output support:
+
+- input CSV field: `delta_u_thermal_bridging [W/m2K]`
+- hourly thermal-bridge integration in the direct transmission branch:
+  - `h_tr_tb = envelope_area * delta_u_thermal_bridging`
+- annual summary outputs:
+  - `DeltaUThermalBridging [W/m2K]`
+  - `ThermalBridgeConductance [W/K]`
+  - `ThermalBridgingLoss [kWh]`
+  - `HeatingPeriodThermalBridgingLoss [kWh]`
+- hourly output:
+  - `ThermalBridgingLoss [W]`
+
+`TransmissionLoss` is reported as the total transmission loss including the
+thermal-bridge contribution.
 
 The heating period is defined as all hours belonging to days with a daily mean
 outdoor temperature below `12.0 C`.

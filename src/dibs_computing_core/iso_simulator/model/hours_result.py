@@ -32,6 +32,7 @@ class Result:
         "SolarGainsNorthWindow": "solar_gains_north_window",
         "SolarGainsTotal": "solar_gains_total",
         "TransmissionLoss": "transmission_loss",
+        "ThermalBridgingLoss": "thermal_bridging_loss",
         "VentilationLoss": "ventilation_loss",
         "GlobalHorizontalRadiationTotal": "global_horizontal_radiation",
         "DirectNormalRadiationTotal": "direct_normal_radiation",
@@ -76,6 +77,7 @@ class Result:
         self.appliance_gains_demand = []
         self.appliance_gains_elt_demand = []
         self.transmission_loss = []
+        self.thermal_bridging_loss = []
         self.ventilation_loss = []
         self.is_heating_period_hour = []
         self.occupancy_profile_people = []
@@ -103,6 +105,7 @@ class Result:
             hour: int,
             electricity_demand_total: float = 0.0,
             transmission_loss: float = 0.0,
+            thermal_bridging_loss: float = 0.0,
             ventilation_loss: float = 0.0,
             is_heating_period_hour: bool = False,
             occupancy_profile_people: float = 0.0,
@@ -145,6 +148,7 @@ class Result:
         self.appliance_gains_demand.append(appliance_gains_demand)
         self.appliance_gains_elt_demand.append(appliance_gains_elt_demand)
         self.transmission_loss.append(transmission_loss)
+        self.thermal_bridging_loss.append(thermal_bridging_loss)
         self.ventilation_loss.append(ventilation_loss)
         self.is_heating_period_hour.append(is_heating_period_hour)
         self.occupancy_profile_people.append(occupancy_profile_people)
