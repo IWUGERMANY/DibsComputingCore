@@ -33,6 +33,9 @@ class Result:
         "SolarGainsTotal": "solar_gains_total",
         "TransmissionLoss": "transmission_loss",
         "VentilationLoss": "ventilation_loss",
+        "GlobalHorizontalRadiationTotal": "global_horizontal_radiation",
+        "DirectNormalRadiationTotal": "direct_normal_radiation",
+        "DiffuseHorizontalRadiationTotal": "diffuse_horizontal_radiation",
     }
 
     MEAN_SERIES = {
@@ -40,6 +43,10 @@ class Result:
         "ApplianceProfileFactor": "appliance_profile_factor",
         "AirChangeRateEffective": "air_change_rate_effective",
         "AirFlowRateEffective": "air_flow_rate_effective",
+        "GlobalHorizontalRadiation": "global_horizontal_radiation",
+        "DirectNormalRadiation": "direct_normal_radiation",
+        "DiffuseHorizontalRadiation": "diffuse_horizontal_radiation",
+        "DrybulbTemperature": "drybulb_temperature",
     }
 
     def __init__(self):
@@ -75,6 +82,10 @@ class Result:
         self.appliance_profile_factor = []
         self.air_change_rate_effective = []
         self.air_flow_rate_effective = []
+        self.drybulb_temperature = []
+        self.global_horizontal_radiation = []
+        self.direct_normal_radiation = []
+        self.diffuse_horizontal_radiation = []
 
     def append_results(
             self,
@@ -98,6 +109,10 @@ class Result:
             appliance_profile_factor: float = 0.0,
             air_change_rate_effective: float = 0.0,
             air_flow_rate_effective: float = 0.0,
+            drybulb_temperature: float = 0.0,
+            global_horizontal_radiation: float = 0.0,
+            direct_normal_radiation: float = 0.0,
+            diffuse_horizontal_radiation: float = 0.0,
     ) -> None:
         """
         Appends the result of a simulated hour to the result object.
@@ -136,6 +151,10 @@ class Result:
         self.appliance_profile_factor.append(appliance_profile_factor)
         self.air_change_rate_effective.append(air_change_rate_effective)
         self.air_flow_rate_effective.append(air_flow_rate_effective)
+        self.drybulb_temperature.append(drybulb_temperature)
+        self.global_horizontal_radiation.append(global_horizontal_radiation)
+        self.direct_normal_radiation.append(direct_normal_radiation)
+        self.diffuse_horizontal_radiation.append(diffuse_horizontal_radiation)
 
     @staticmethod
     def _sum_to_kwh(values: list[float]) -> float:

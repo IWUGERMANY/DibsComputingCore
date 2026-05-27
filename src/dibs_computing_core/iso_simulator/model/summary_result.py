@@ -125,6 +125,27 @@ class SummaryResult:
         self.heating_days = result.sum_object.HeatingDays
         self.heating_degree_days = result.sum_object.HeatingDegreeDays
         self.room_heating_degree_days = result.sum_object.RoomHeatingDegreeDays
+        self.global_horizontal_radiation_total = (
+            result.sum_object.GlobalHorizontalRadiationTotal_sum
+        )
+        self.direct_normal_radiation_total = (
+            result.sum_object.DirectNormalRadiationTotal_sum
+        )
+        self.diffuse_horizontal_radiation_total = (
+            result.sum_object.DiffuseHorizontalRadiationTotal_sum
+        )
+        self.global_horizontal_radiation_mean_annual = (
+            result.sum_object.GlobalHorizontalRadiation_mean
+        )
+        self.direct_normal_radiation_mean_annual = (
+            result.sum_object.DirectNormalRadiation_mean
+        )
+        self.diffuse_horizontal_radiation_mean_annual = (
+            result.sum_object.DiffuseHorizontalRadiation_mean
+        )
+        self.drybulb_temperature_mean_annual = (
+            result.sum_object.DrybulbTemperature_mean
+        )
 
         self.heating_period_heating_demand = result.sum_object.HeatingPeriodHeatingDemand_sum
         self.heating_period_heating_demand_surface = surface(
@@ -191,6 +212,27 @@ class SummaryResult:
         self.heating_period_ventilation_loss = result.sum_object.HeatingPeriodVentilationLoss_sum
         self.heating_period_ventilation_loss_surface = surface(
             self.heating_period_ventilation_loss
+        )
+        self.heating_period_global_horizontal_radiation_total = (
+            result.sum_object.HeatingPeriodGlobalHorizontalRadiationTotal_sum
+        )
+        self.heating_period_direct_normal_radiation_total = (
+            result.sum_object.HeatingPeriodDirectNormalRadiationTotal_sum
+        )
+        self.heating_period_diffuse_horizontal_radiation_total = (
+            result.sum_object.HeatingPeriodDiffuseHorizontalRadiationTotal_sum
+        )
+        self.global_horizontal_radiation_mean_heating_period = (
+            result.sum_object.HeatingPeriodGlobalHorizontalRadiation_mean
+        )
+        self.direct_normal_radiation_mean_heating_period = (
+            result.sum_object.HeatingPeriodDirectNormalRadiation_mean
+        )
+        self.diffuse_horizontal_radiation_mean_heating_period = (
+            result.sum_object.HeatingPeriodDiffuseHorizontalRadiation_mean
+        )
+        self.drybulb_temperature_mean_heating_period = (
+            result.sum_object.HeatingPeriodDrybulbTemperature_mean
         )
 
         self.occupancy_profile_people_mean_annual = (

@@ -36,10 +36,58 @@ def build_heating_period_mask_and_metrics(
             for hour_index in grouped_day_indices[day_key]:
                 mask[hour_index] = True
 
+    heating_period_weather_data = [
+        hour_weather
+        for hour_weather, is_heating_hour in zip(weather_data, mask)
+        if is_heating_hour
+    ]
+
+    def sum_radiation(values, attr_name: str) -> float:
+        return sum(getattr(value, attr_name) for value in values) * 0.001
+
+    def mean(values, attr_name: str) -> float:
+        if not values:
+            return 0.0
+        return sum(getattr(value, attr_name) for value in values) / len(values)
+
     return mask, {
         "HeatingDays": heating_days,
         "HeatingDegreeDays": heating_degree_days,
         "RoomHeatingDegreeDays": room_heating_degree_days,
+        "GlobalHorizontalRadiationTotal_sum": sum_radiation(
+            weather_data, "glohorrad_Whm2"
+        ),
+        "DirectNormalRadiationTotal_sum": sum_radiation(
+            weather_data, "dirnorrad_Whm2"
+        ),
+        "DiffuseHorizontalRadiationTotal_sum": sum_radiation(
+            weather_data, "difhorrad_Whm2"
+        ),
+        "HeatingPeriodGlobalHorizontalRadiationTotal_sum": sum_radiation(
+            heating_period_weather_data, "glohorrad_Whm2"
+        ),
+        "HeatingPeriodDirectNormalRadiationTotal_sum": sum_radiation(
+            heating_period_weather_data, "dirnorrad_Whm2"
+        ),
+        "HeatingPeriodDiffuseHorizontalRadiationTotal_sum": sum_radiation(
+            heating_period_weather_data, "difhorrad_Whm2"
+        ),
+        "GlobalHorizontalRadiation_mean": mean(weather_data, "glohorrad_Whm2"),
+        "DirectNormalRadiation_mean": mean(weather_data, "dirnorrad_Whm2"),
+        "DiffuseHorizontalRadiation_mean": mean(weather_data, "difhorrad_Whm2"),
+        "HeatingPeriodGlobalHorizontalRadiation_mean": mean(
+            heating_period_weather_data, "glohorrad_Whm2"
+        ),
+        "HeatingPeriodDirectNormalRadiation_mean": mean(
+            heating_period_weather_data, "dirnorrad_Whm2"
+        ),
+        "HeatingPeriodDiffuseHorizontalRadiation_mean": mean(
+            heating_period_weather_data, "difhorrad_Whm2"
+        ),
+        "DrybulbTemperature_mean": mean(weather_data, "drybulb_C"),
+        "HeatingPeriodDrybulbTemperature_mean": mean(
+            heating_period_weather_data, "drybulb_C"
+        ),
     }
 
 
@@ -132,7 +180,6 @@ def extracted_method_to_simulate_one_building(simulator: BuildingSimulator, t_se
 
     building.t_set_heating = t_set_heating_temp
 
-    extract_outdoor_temperature = simulator.extract_outdoor_temperature
     calc_altitude_and_azimuth = simulator.calc_altitude_and_azimuth
     set_t_air_based_on_hour = simulator.set_t_air_based_on_hour
     calc_window_gains_and_illuminance = simulator.calc_window_gains_and_illuminance_for_all_windows
@@ -176,6 +223,10 @@ def extracted_method_to_simulate_one_building(simulator: BuildingSimulator, t_se
     append_air_change_rate_effective = result.air_change_rate_effective.append
     append_air_flow_rate_effective = result.air_flow_rate_effective.append
     append_electricity_demand_total = result.electricity_demand_total.append
+    append_drybulb_temperature = result.drybulb_temperature.append
+    append_global_horizontal_radiation = result.global_horizontal_radiation.append
+    append_direct_normal_radiation = result.direct_normal_radiation.append
+    append_diffuse_horizontal_radiation = result.diffuse_horizontal_radiation.append
     calc_h_ve_adj = building.calc_h_ve_adj
     solve_building_lighting = building.solve_building_lighting
     calc_hot_water_usage_with_schedule = calc_hot_water_usage
@@ -193,8 +244,11 @@ def extracted_method_to_simulate_one_building(simulator: BuildingSimulator, t_se
         schedule_hour = occupancy_schedule_local[hour]
         people = schedule_hour.People
         appliances = schedule_hour.Appliances
-
-        t_out = extract_outdoor_temperature(hour)
+        hour_weather = simulator.weather_data[hour]
+        t_out = hour_weather.drybulb_C
+        global_horizontal_radiation = hour_weather.glohorrad_Whm2
+        direct_normal_radiation = hour_weather.dirnorrad_Whm2
+        diffuse_horizontal_radiation = hour_weather.difhorrad_Whm2
 
         altitude, azimuth = calc_altitude_and_azimuth(hour)
 
@@ -310,6 +364,10 @@ def extracted_method_to_simulate_one_building(simulator: BuildingSimulator, t_se
         append_air_change_rate_effective(air_change_rate_effective)
         append_air_flow_rate_effective(air_flow_rate_effective)
         append_electricity_demand_total(electricity_demand_total)
+        append_drybulb_temperature(t_out)
+        append_global_horizontal_radiation(global_horizontal_radiation)
+        append_direct_normal_radiation(direct_normal_radiation)
+        append_diffuse_horizontal_radiation(diffuse_horizontal_radiation)
         """
         Some calculations used for the console prints
         """

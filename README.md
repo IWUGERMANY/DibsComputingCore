@@ -23,11 +23,22 @@ be exported by `dibs_cli`:
 - ventilation losses
 - heating-period-only sums for demand, gains, and losses
 - heating-day weather metrics derived from daily mean EPW temperatures
+- annual and heating-period raw weather diagnostics for:
+  - global horizontal radiation
+  - direct normal radiation
+  - diffuse horizontal radiation
+  - dry-bulb / outside temperature means
 - annual and heating-period mean occupancy/appliance schedule factors
 - annual and heating-period mean effective air exchange rates and flows
 
 The heating period is defined as all hours belonging to days with a daily mean
 outdoor temperature below `12.0 C`.
+
+Weather diagnostic units:
+
+- radiation totals: `kWh/m2`
+- radiation means: hourly mean `Wh/m2`
+- dry-bulb temperature means: `C`
 
 ## Further information
 
