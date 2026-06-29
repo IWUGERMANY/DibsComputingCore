@@ -21,6 +21,66 @@ from ..emission_system import *
 from ..supply_system import *
 
 import math
+import os
+
+try:
+    from numba import njit  # type: ignore
+except Exception:  # pragma: no cover - optional dependency
+    njit = None
+
+
+def _thermal_core_py(
+        c_m,
+        h_tr_em,
+        h_tr_ms,
+        h_tr_is,
+        h_tr_w,
+        h_ve_adj,
+        phi_m,
+        phi_st,
+        phi_ia,
+        t_out,
+        t_m_prev,
+):
+    h_tr_1 = 1.0 / (1.0 / h_ve_adj + 1.0 / h_tr_is)
+    h_tr_2 = h_tr_1 + h_tr_w
+    h_tr_3 = 1.0 / (1.0 / h_tr_2 + 1.0 / h_tr_ms)
+
+    phi_m_tot = (
+            phi_m
+            + h_tr_em * t_out
+            + h_tr_3
+            * (
+                    phi_st
+                    + h_tr_w * t_out
+                    + h_tr_1 * ((phi_ia / h_ve_adj) + t_out)
+            )
+            / h_tr_2
+    )
+
+    act_val1 = (
+            (t_m_prev * ((c_m / 3600.0) - 0.5 * (h_tr_3 + h_tr_em)))
+            + phi_m_tot
+    )
+    act_val2 = ((c_m / 3600.0) + 0.5 * (h_tr_3 + h_tr_em))
+    t_m_next = act_val1 / act_val2
+    t_m = (t_m_next + t_m_prev) / 2.0
+    t_s = (
+                  h_tr_ms * t_m
+                  + phi_st
+                  + h_tr_w * t_out
+                  + h_tr_1 * (t_out + phi_ia / h_ve_adj)
+          ) / (h_tr_ms + h_tr_w + h_tr_1)
+    t_air = (
+                    h_tr_is * t_s + h_ve_adj * t_out + phi_ia
+            ) / (h_tr_is + h_ve_adj)
+    return phi_m_tot, t_m_next, t_m, t_s, t_air
+
+
+if njit is not None:
+    _thermal_core_numba = njit(cache=True)(_thermal_core_py)
+else:  # pragma: no cover - optional dependency
+    _thermal_core_numba = None
 
 
 class Building(object):
@@ -333,6 +393,10 @@ class Building(object):
         self.cooling_supply_system = cooling_supply_system
         self.heating_emission_system = heating_emission_system
         self.cooling_emission_system = cooling_emission_system
+        self._use_numba_thermal = (
+                os.getenv("LBBD_ENABLE_NUMBA_THERMAL", "").lower() in {"1", "true", "yes"}
+                and _thermal_core_numba is not None
+        )
 
     @property
     def h_tr_1(self):
@@ -582,8 +646,10 @@ class Building(object):
 
         # check demand, and change state of self.has_heating_demand, and self._has_cooling_demand
         self.has_demand(internal_gains, solar_gains, t_out, t_m_prev)
+        has_heating = self.has_heating_demand
+        has_cooling = self.has_cooling_demand
 
-        if not self.has_heating_demand and not self.has_cooling_demand:
+        if not has_heating and not has_cooling:
             # no heating or cooling demand
 
             # calculate temperatures of building R-C-model and exit
@@ -623,14 +689,14 @@ class Building(object):
                 SupplyDirector()
             )  # Initialise Heating System Manager
 
-            if self.has_heating_demand:
+            if has_heating:
                 my_system = self.supply_mapping[self.heating_supply_system](
                     load=self.energy_demand,
                     t_out=t_out,
                     heating_supply_temperature=self.heating_supply_temperature,
                     cooling_supply_temperature=self.cooling_supply_temperature,
-                    has_heating_demand=self.has_heating_demand,
-                    has_cooling_demand=self.has_cooling_demand,
+                    has_heating_demand=has_heating,
+                    has_cooling_demand=has_cooling,
                 )
                 supply_director.set_builder(my_system)
                 supplyOut = supply_director.calc_system()
@@ -643,14 +709,14 @@ class Building(object):
                 self.cooling_sys_fossils = 0
                 self.electricity_out = supplyOut.electricity_out
 
-            elif self.has_cooling_demand:
+            elif has_cooling:
                 my_system = self.supply_mapping[self.cooling_supply_system](
                     load=self.energy_demand * (-1),
                     t_out=t_out,
                     heating_supply_temperature=self.heating_supply_temperature,
                     cooling_supply_temperature=self.cooling_supply_temperature,
-                    has_heating_demand=self.has_heating_demand,
-                    has_cooling_demand=self.has_cooling_demand,
+                    has_heating_demand=has_heating,
+                    has_cooling_demand=has_cooling,
                 )
                 supply_director.set_builder(my_system)
                 supplyOut = supply_director.calc_system()
@@ -716,19 +782,74 @@ class Building(object):
         # Eq. C.1 - C.3
         self.calc_heat_flow(t_out, internal_gains, solar_gains, energy_demand)
         # Eq. C.5
-        self.calc_phi_m_tot(t_out)
+        if self._use_numba_thermal:
+            (
+                self.phi_m_tot,
+                self.t_m_next,
+                self.t_m,
+                self.t_s,
+                self.t_air,
+            ) = _thermal_core_numba(
+                self.c_m,
+                self.h_tr_em,
+                self.h_tr_ms,
+                self.h_tr_is,
+                self.h_tr_w,
+                self.h_ve_adj,
+                self.phi_m,
+                self.phi_st,
+                self.phi_ia,
+                t_out,
+                t_m_prev,
+            )
+        else:
+            # Fast Python path: inline thermal core math to avoid repeated
+            # method/property dispatch overhead in the hot loop.
+            h_ve_adj = self.h_ve_adj
+            h_tr_is = self.h_tr_is
+            h_tr_w = self.h_tr_w
+            h_tr_ms = self.h_tr_ms
+            h_tr_em = self.h_tr_em
+            c_m = self.c_m
+            phi_m = self.phi_m
+            phi_st = self.phi_st
+            phi_ia = self.phi_ia
 
-        # Calculates the new bulk temperature point from the old one
-        # Eq. C.4
-        self.calc_t_m_next(t_m_prev)
+            h_tr_1 = 1.0 / (1.0 / h_ve_adj + 1.0 / h_tr_is)
+            h_tr_2 = h_tr_1 + h_tr_w
+            h_tr_3 = 1.0 / (1.0 / h_tr_2 + 1.0 / h_tr_ms)
 
-        # Calculates the average bulk temperature used for the remaining calculation
-        # Eq. C.9
-        self.calc_t_m(t_m_prev)
-        # Eq. C.10
-        self.calc_t_s(t_out)
-        # Eq. C.11
-        self.calc_t_air(t_out)
+            phi_m_tot = (
+                phi_m
+                + h_tr_em * t_out
+                + h_tr_3
+                * (
+                    phi_st
+                    + h_tr_w * t_out
+                    + h_tr_1 * ((phi_ia / h_ve_adj) + t_out)
+                )
+                / h_tr_2
+            )
+            t_m_next = (
+                (t_m_prev * ((c_m / 3600.0) - 0.5 * (h_tr_3 + h_tr_em)))
+                + phi_m_tot
+            ) / ((c_m / 3600.0) + 0.5 * (h_tr_3 + h_tr_em))
+            t_m = (t_m_next + t_m_prev) / 2.0
+            t_s = (
+                h_tr_ms * t_m
+                + phi_st
+                + h_tr_w * t_out
+                + h_tr_1 * (t_out + phi_ia / h_ve_adj)
+            ) / (h_tr_ms + h_tr_w + h_tr_1)
+            t_air = (
+                h_tr_is * t_s + h_ve_adj * t_out + phi_ia
+            ) / (h_tr_is + h_ve_adj)
+
+            self.phi_m_tot = phi_m_tot
+            self.t_m_next = t_m_next
+            self.t_m = t_m
+            self.t_s = t_s
+            self.t_air = t_air
 
         return self.t_m, self.t_air, self.t_opperative
 

@@ -145,6 +145,59 @@ class Window:
                 self.incident_illuminance * self.glass_light_transmittance
         )
 
+    def calc_solar_gains_precomputed(
+            self,
+            sun_cos_altitude: float,
+            sun_sin_altitude: float,
+            sun_azimuth_rad: float,
+            normal_direct_radiation: int,
+            horizontal_diffuse_radiation: int,
+            t_air: float,
+            hour: int,
+    ) -> float:
+        """
+        Hot-path variant using precomputed sun components.
+        Returns direct_factor for optional illuminance reuse.
+        """
+        direct_factor = self.calc_direct_solar_factor_precomputed(
+            sun_cos_altitude,
+            sun_sin_altitude,
+            sun_azimuth_rad,
+        )
+        diffuse_solar = horizontal_diffuse_radiation * self._diffuse_solar_factor
+        self.incident_solar = (
+            (direct_factor * normal_direct_radiation + diffuse_solar) * self.area
+        )
+
+        cooling_season = 2169 < hour < 6561
+        if (
+            round(t_air, 1) > 24
+            and cooling_season
+            and self.glass_solar_shading_transmittance > 0
+        ):
+            self.solar_gains = (
+                self.glass_solar_shading_transmittance * self.incident_solar
+            )
+        else:
+            self.solar_gains = self.glass_solar_transmittance * self.incident_solar
+
+        return direct_factor
+
+    def calc_illuminance_precomputed(
+            self,
+            direct_factor: float,
+            horizontal_diffuse_illuminance: int,
+            normal_direct_illuminance: int,
+    ) -> None:
+        diffuse_illuminance = self._diffuse_solar_factor * horizontal_diffuse_illuminance
+        direct_illuminance = direct_factor * normal_direct_illuminance
+        self.incident_illuminance = (
+            direct_illuminance + diffuse_illuminance
+        ) * self.area
+        self.transmitted_illuminance = (
+            self.incident_illuminance * self.glass_light_transmittance
+        )
+
     def calc_direct_solar_factor(
             self, sun_altitude: float, sun_azimuth: float
     ) -> float:
@@ -177,4 +230,20 @@ class Window:
         self._last_sun_altitude = sun_altitude
         self._last_sun_azimuth = sun_azimuth
         self._last_direct_factor = direct_factor
+        return direct_factor
+
+    def calc_direct_solar_factor_precomputed(
+            self,
+            sun_cos_altitude: float,
+            sun_sin_altitude: float,
+            sun_azimuth_rad: float,
+    ) -> float:
+        direct_factor = (
+            sun_cos_altitude
+            * self._sin_altitude_tilt
+            * math.cos(sun_azimuth_rad - self.azimuth_tilt_rad)
+            + sun_sin_altitude * self._cos_altitude_tilt
+        )
+        if direct_factor <= 0:
+            return 0.0
         return direct_factor

@@ -1,6 +1,7 @@
 """
 this class implements the business logic to simulate a given building
 """
+import math
 from dibs_computing_core.iso_simulator.model.calculations_sum import CalculationOfSum
 from dibs_computing_core.iso_simulator.model.location import Location
 from dibs_computing_core.iso_simulator.model.schedule_name import ScheduleName
@@ -344,33 +345,48 @@ class BuildingSimulator:
         hour_weather = self.weather_data[hour]
         dirnorrad = hour_weather.dirnorrad_Whm2
         difhorrad = hour_weather.difhorrad_Whm2
-        if calculate_illuminance:
-            dirnorillum = hour_weather.dirnorillum_lux
-            difhorillum = hour_weather.difhorillum_lux
+        windows = self.all_windows
+        sun_altitude_rad = math.radians(sun_altitude)
+        sun_azimuth_rad = math.radians(sun_azimuth)
+        sun_cos_altitude = math.cos(sun_altitude_rad)
+        sun_sin_altitude = math.sin(sun_altitude_rad)
 
         solar_gains_sum = 0.0
         transmitted_illuminance_sum = 0.0
 
-        for element in self.all_windows:
-            element.calc_solar_gains(
-                sun_altitude,
-                sun_azimuth,
-                dirnorrad,
-                difhorrad,
-                t_air,
-                hour,
-            )
-            if calculate_illuminance:
-                element.calc_illuminance(
-                    sun_altitude,
-                    sun_azimuth,
-                    dirnorillum,
-                    difhorillum,
+        if calculate_illuminance:
+            dirnorillum = hour_weather.dirnorillum_lux
+            difhorillum = hour_weather.difhorillum_lux
+            for element in windows:
+                direct_factor = element.calc_solar_gains_precomputed(
+                    sun_cos_altitude,
+                    sun_sin_altitude,
+                    sun_azimuth_rad,
+                    dirnorrad,
+                    difhorrad,
+                    t_air,
+                    hour,
                 )
-            else:
+                element.calc_illuminance_precomputed(
+                    direct_factor,
+                    difhorillum,
+                    dirnorillum,
+                )
+                solar_gains_sum += element.solar_gains
+                transmitted_illuminance_sum += element.transmitted_illuminance
+        else:
+            for element in windows:
+                element.calc_solar_gains_precomputed(
+                    sun_cos_altitude,
+                    sun_sin_altitude,
+                    sun_azimuth_rad,
+                    dirnorrad,
+                    difhorrad,
+                    t_air,
+                    hour,
+                )
                 element.transmitted_illuminance = 0.0
-            solar_gains_sum += element.solar_gains
-            transmitted_illuminance_sum += element.transmitted_illuminance
+                solar_gains_sum += element.solar_gains
 
         return solar_gains_sum, transmitted_illuminance_sum
     def calc_occupancy(
