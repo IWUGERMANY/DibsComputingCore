@@ -20,68 +20,26 @@ from ..emission_system import *
 
 from ..supply_system import *
 
-import math
 import os
 
-try:
-    from numba import njit  # type: ignore
-except Exception:  # pragma: no cover - optional dependency
-    njit = None
-
-
-def _thermal_core_py(
-        c_m,
-        h_tr_em,
-        h_tr_ms,
-        h_tr_is,
-        h_tr_w,
-        h_ve_adj,
-        phi_m,
-        phi_st,
-        phi_ia,
-        t_out,
-        t_m_prev,
-):
-    h_tr_1 = 1.0 / (1.0 / h_ve_adj + 1.0 / h_tr_is)
-    h_tr_2 = h_tr_1 + h_tr_w
-    h_tr_3 = 1.0 / (1.0 / h_tr_2 + 1.0 / h_tr_ms)
-
-    phi_m_tot = (
-            phi_m
-            + h_tr_em * t_out
-            + h_tr_3
-            * (
-                    phi_st
-                    + h_tr_w * t_out
-                    + h_tr_1 * ((phi_ia / h_ve_adj) + t_out)
-            )
-            / h_tr_2
-    )
-
-    act_val1 = (
-            (t_m_prev * ((c_m / 3600.0) - 0.5 * (h_tr_3 + h_tr_em)))
-            + phi_m_tot
-    )
-    act_val2 = ((c_m / 3600.0) + 0.5 * (h_tr_3 + h_tr_em))
-    t_m_next = act_val1 / act_val2
-    t_m = (t_m_next + t_m_prev) / 2.0
-    t_s = (
-                  h_tr_ms * t_m
-                  + phi_st
-                  + h_tr_w * t_out
-                  + h_tr_1 * (t_out + phi_ia / h_ve_adj)
-          ) / (h_tr_ms + h_tr_w + h_tr_1)
-    t_air = (
-                    h_tr_is * t_s + h_ve_adj * t_out + phi_ia
-            ) / (h_tr_is + h_ve_adj)
-    return phi_m_tot, t_m_next, t_m, t_s, t_air
-
-
-if njit is not None:
-    _thermal_core_numba = njit(cache=True)(_thermal_core_py)
-else:  # pragma: no cover - optional dependency
-    _thermal_core_numba = None
-
+from .building_energy import (
+    calc_energy_demand as _calc_energy_demand,
+    calc_energy_demand_unrestricted as _calc_energy_demand_unrestricted,
+    has_demand as _has_demand,
+    solve_building_energy as _solve_building_energy,
+)
+from .building_heat_flow import calc_heat_flow as _calc_heat_flow
+from .building_lighting import solve_building_lighting as _solve_building_lighting
+from .building_ventilation import (
+    calc_h_ve_adj as _calc_h_ve_adj,
+    check_night_flushing as _check_night_flushing,
+)
+from .thermal_core import _thermal_core_numba
+from dibs_computing_core.iso_simulator.building_simulator.system_enums import system_key
+from .building_system_mappings import (
+    BUILDING_EMISSION_SYSTEM_MAPPING,
+    BUILDING_SUPPLY_SYSTEM_MAPPING,
+)
 
 class Building(object):
     """
@@ -223,67 +181,6 @@ class Building(object):
         self.dhw_system = dhw_system
         self.scr_gebaeude_id = scr_gebaeude_id
 
-        self.class_mapping = {
-            "AirConditioning": AirConditioning,
-            "SurfaceHeatingCooling": SurfaceHeatingCooling,
-            "ThermallyActivated": ThermallyActivated,
-            "NoCooling": NoCooling,
-            "NoHeating": NoHeating,
-        }
-
-        self.supply_mapping = {
-            "OilBoilerStandardBefore86": OilBoilerStandardBefore86,
-            "OilBoilerStandardFrom95": OilBoilerStandardFrom95,
-            "OilBoilerLowTempBefore87": OilBoilerLowTempBefore87,
-            "OilBoilerLowTempBefore95": OilBoilerLowTempBefore95,
-            "OilBoilerLowTempFrom95": OilBoilerLowTempFrom95,
-            "OilBoilerCondensingBefore95": OilBoilerCondensingBefore95,
-            "OilBoilerCondensingFrom95": OilBoilerCondensingFrom95,
-            "OilBoilerCondensingImproved": OilBoilerCondensingImproved,
-            "GasBoilerStandardBefore86": GasBoilerStandardBefore86,
-            "GasBoilerStandardBefore95": GasBoilerStandardBefore95,
-            "GasBoilerStandardFrom95": GasBoilerStandardFrom95,
-            "GasBoilerLowTempBefore87": GasBoilerLowTempBefore87,
-            "LGasBoilerLowTempBefore87": LGasBoilerLowTempBefore87,
-            "GasBoilerLowTempBefore95": GasBoilerLowTempBefore95,
-            "LGasBoilerLowTempBefore95": LGasBoilerLowTempBefore95,
-            "GasBoilerLowTempFrom95": GasBoilerLowTempFrom95,
-            "LGasBoilerLowTempFrom95": LGasBoilerLowTempFrom95,
-            "BiogasOilBoilerLowTempBefore95": BiogasOilBoilerLowTempBefore95,
-            "GasBoilerLowTempSpecialFrom78": GasBoilerLowTempSpecialFrom78,
-            "GasBoilerLowTempSpecialFrom95": GasBoilerLowTempSpecialFrom95,
-            "GasBoilerCondensingBefore95": GasBoilerCondensingBefore95,
-            "LGasBoilerCondensingBefore95": LGasBoilerCondensingBefore95,
-            "BiogasBoilerCondensingBefore95": BiogasBoilerCondensingBefore95,
-            "BiogasBoilerCondensingFrom95": BiogasBoilerCondensingFrom95,
-            "GasBoilerCondensingFrom95": GasBoilerCondensingFrom95,
-            "LGasBoilerCondensingFrom95": LGasBoilerCondensingFrom95,
-            "BiogasOilBoilerCondensingFrom95": BiogasOilBoilerCondensingFrom95,
-            "GasBoilerCondensingImproved": GasBoilerCondensingImproved,
-            "LGasBoilerCondensingImproved": LGasBoilerCondensingImproved,
-            "BiogasOilBoilerCondensingImproved": BiogasOilBoilerCondensingImproved,
-            "WoodChipSolidFuelBoiler": WoodChipSolidFuelBoiler,
-            "WoodPelletSolidFuelBoiler": WoodPelletSolidFuelBoiler,
-            "WoodSolidFuelBoilerCentral": WoodSolidFuelBoilerCentral,
-            "CoalSolidFuelBoiler": CoalSolidFuelBoiler,
-            "SolidFuelLiquidFuelFurnace": SolidFuelLiquidFuelFurnace,
-            "HeatPumpAirSource": HeatPumpAirSource,
-            "HeatPumpGroundSource": HeatPumpGroundSource,
-            "GasCHP": GasCHP,
-            "DistrictHeating": DistrictHeating,
-            "ElectricHeating": ElectricHeating,
-            "DirectHeater": DirectHeater,
-            "AirCooledPistonScroll": AirCooledPistonScroll,
-            "AirCooledPistonScrollMulti": AirCooledPistonScrollMulti,
-            "WaterCooledPistonScroll": WaterCooledPistonScroll,
-            "AbsorptionRefrigerationSystem": AbsorptionRefrigerationSystem,
-            "DistrictCooling": DistrictCooling,
-            "GasEnginePistonScroll": GasEnginePistonScroll,
-            "DirectCooler": DirectCooler,
-            "NoHeating": NoHeater,
-            "NoCooling": NoCooler,
-        }
-
         ## Dimensions
         # area of all windows
         self.window_area_north = window_area_north
@@ -397,6 +294,22 @@ class Building(object):
                 os.getenv("LBBD_ENABLE_NUMBA_THERMAL", "").lower() in {"1", "true", "yes"}
                 and _thermal_core_numba is not None
         )
+        # Hot-loop helpers: directors are stateless apart from the current builder,
+        # so one instance per Building avoids repeated allocation in hourly calls.
+        self._emission_director = EmissionDirector()
+        self._supply_director = SupplyDirector()
+        self._heating_emission_cls = BUILDING_EMISSION_SYSTEM_MAPPING[
+            system_key(self.heating_emission_system)
+        ]
+        self._cooling_emission_cls = BUILDING_EMISSION_SYSTEM_MAPPING[
+            system_key(self.cooling_emission_system)
+        ]
+        self._heating_supply_cls = BUILDING_SUPPLY_SYSTEM_MAPPING[
+            system_key(self.heating_supply_system)
+        ]
+        self._cooling_supply_cls = BUILDING_SUPPLY_SYSTEM_MAPPING[
+            system_key(self.cooling_supply_system)
+        ]
 
     @property
     def h_tr_1(self):
@@ -431,345 +344,41 @@ class Building(object):
         """
         return 0.3 * self.t_air + 0.7 * self.t_s
 
+    # Public Building API: these methods intentionally remain on Building and
+    # delegate to focused helper modules. This keeps existing callers and
+    # profiling method names stable while reducing this file's responsibilities.
+
     def calc_h_ve_adj(self, hour, t_out, usage_start, usage_end):
         """
-        Calculates h_ve_adj depending on the building's usage time
-
-        # (Eq. 21) in ISO 13790, p. 49-50
-
-        :param hour: Hour of the timestep
-        :type hour: int
-        :param t_out: Outdoor temperature of this timestep
-        :type t_out: float
-        :param usage_start: Beginning of usage time according to SIA2024
-        :type usage_start: int
-        :param usage_end: Ending of usage time according to SIA2024
-        :type usage_end: int
-
-        :return: self.h_ve_adj
-        :rtype: float
+        Calculates h_ve_adj depending on the building's usage time.
         """
-        # Call this function and check if night flushing needs to be taken into account
-        self.check_night_flushing(hour, t_out)
-
-        daytime = hour % 24
-
-        # Check if ach_vent and ach_win is equal to zero (this is necessary due to Eq. C.6, DIN EN ISO 13790)
-        if self.ach_vent == 0 and self.ach_win == 0:
-            self.h_ve_adj = 1200 * 1 * self.building_vol * (self.ach_inf / 3600)
-
-        else:
-            if usage_start < usage_end:
-                if usage_start <= daytime < usage_end:
-                    if self.night_flushing_on:
-                        self.h_ve_adj = (
-                                1200
-                                * 1
-                                * self.building_vol
-                                * (self.night_flushing_flow / 3600)
-                        )
-
-                        # Set t_set_heating = 0 for the time step, otherwise the heating system heats up during night flushing is on
-                        self.t_set_heating = 0
-
-                    else:
-                        self.h_ve_adj = 1200 * (
-                                (self.b_ek * self.building_vol * (self.ach_vent / 3600))
-                                + (1 * self.building_vol * (self.ach_win / 3600))
-                        )
-
-                elif not usage_start <= daytime < usage_end:
-                    if self.night_flushing_on:
-                        self.h_ve_adj = (
-                                1200
-                                * 1
-                                * self.building_vol
-                                * (self.night_flushing_flow / 3600)
-                        )
-
-                        # Set t_set_heating = 0 for the time step, otherwise the heating system heats up during night flushing is on
-                        self.t_set_heating = 0
-
-                    else:
-                        # Only infiltration
-                        self.h_ve_adj = (
-                                1200 * 1 * self.building_vol * (self.ach_inf / 3600)
-                        )
-
-                else:
-                    raise ValueError(
-                        "Something went wrong with ventilation heat loss coefficient h_ve_adj"
-                    )
-
-            else:
-                if not usage_end <= daytime < usage_start:
-                    if self.night_flushing_on:
-                        self.h_ve_adj = (
-                                1200
-                                * 1
-                                * self.building_vol
-                                * (self.night_flushing_flow / 3600)
-                        )
-
-                        # Set t_set_heating = 0 for the time step, otherwise the heating system heats up during night flushing is on
-                        self.t_set_heating = 0
-
-                    else:
-                        self.h_ve_adj = 1200 * (
-                                (self.b_ek * self.building_vol * (self.ach_vent / 3600))
-                                + (1 * self.building_vol * (self.ach_win / 3600))
-                        )
-
-                elif usage_end <= daytime < usage_start:
-                    if self.night_flushing_on:
-                        self.h_ve_adj = (
-                                1200
-                                * 1
-                                * self.building_vol
-                                * (self.night_flushing_flow / 3600)
-                        )
-
-                        # Set t_set_heating = 0 for the time step, otherwise the heating system heats up during night flushing is on
-                        self.t_set_heating = 0
-
-                    else:
-                        # Only infiltration
-                        self.h_ve_adj = (
-                                1200 * 1 * self.building_vol * (self.ach_inf / 3600)
-                        )
-
-                else:
-                    raise ValueError(
-                        "Something went wrong with ventilation heat loss coefficient h_ve_adj"
-                    )
-
-        return self.h_ve_adj
+        return _calc_h_ve_adj(self, hour, t_out, usage_start, usage_end)
 
     def check_night_flushing(self, hour, t_out):
         """
-        Checks if night flushing is on/off
-
-        :param hour: Hour of the timestep
-        :type hour: int
-        :param t_out: Outdoor temperature of this timestep
-        :type t_out: float
-
-        :return: self.night_flushing_on
-        :rtype: bool
+        Checks if night flushing is on/off.
         """
-
-        daytime = hour % 24  # Hour of the day
-        cooling_season = (
-                2169 < hour < 6561
-        )  # Assume cooling season from 01/04 9am - 01/10 9am
-        is_night_time = (
-                daytime < 6 or daytime > 23
-        )  # Define night time between 23:00 and 6:00
-
-        # Use night flushing only if all conditions are satisfied:
-        # Night flushing needs to be available in the specific building, during cooling season,
-        # during night time, indoor air temperature is higher than 21 °C and indoor air temp
-        # is higher than outdoor temp + 2 °C
-        if (
-                self.night_flushing_flow > 0
-                and cooling_season
-                and is_night_time
-                and (round(self.t_air, 1) > 21)
-                and (round(self.t_air, 1) > (t_out + 2))
-        ):
-            self.night_flushing_on = True
-
-        else:
-            self.night_flushing_on = False
-
-        return self.night_flushing_on
+        return _check_night_flushing(self, hour, t_out)
 
     def solve_building_lighting(self, illuminance, occupancy):
         """
-        Calculates the lighting demand for a set timestep
-
-        Daylighting is based on methods in
-        Szokolay, S.V. (1980): Environmental Science Handbook vor architects and builders. Unknown Edition, The Construction Press, Lancaster/London/New York, ISBN: 0-86095-813-2, p. 105ff.
-        respectively
-        Szokolay, S.V. (2008): Introduction to Architectural Science. The Basis of Sustainable Design. 2nd Edition, Elsevier/Architectural Press, Oxford, ISBN: 978-0-7506-8704-1, p. 154ff.
-
-
-        :param illuminance: Illuminance transmitted through the window [Lumens]
-        :type illuminance: float
-        :param occupancy: Probability of full occupancy
-        :type occupancy: float
-
-        :return: self.lighting_demand, Lighting Energy Required for the timestep
-        :rtype: float
-
+        Calculates the lighting demand for a set timestep.
         """
-        lux = (
-                      illuminance
-                      * self.lighting_utilisation_factor
-                      * self.lighting_maintenance_factor
-              ) / self.net_room_area  # [Lux]
-
-        if lux < self.lighting_control and occupancy > 0:
-            # Lighting demand for the hour
-            self.lighting_demand = self.lighting_load * self.net_room_area * occupancy
-        else:
-            self.lighting_demand = 0
+        return _solve_building_lighting(self, illuminance, occupancy)
 
     def solve_building_energy(self, internal_gains, solar_gains, t_out, t_m_prev):
         """
-        Calculates the heating and cooling consumption of a building for a set timestep
-
-        :param internal_gains: internal heat gains from people and appliances [W]
-        :type internal_gains: float
-        :param solar_gains: solar heat gains [W]
-        :type solar_gains: float
-        :param t_out: Outdoor air temperature [C]
-        :type t_out: float
-        :param t_m_prev: Previous air temperature [C]
-        :type t_m_prev: float
-
-        :return: self.heating_demand, space heating demand of the building
-        :return: self.heating_sys_electricity, heating electricity consumption
-        :return: self.heating_sys_fossils, heating fossil fuel consumption
-        :return: self.cooling_demand, space cooling demand of the building
-        :return: self.cooling_sys_electricity, electricity consumption from cooling
-        :return: self.cooling_sys_fossils, fossil fuel consumption from cooling
-        :return: self.electricity_out, electricity produced from combined heat pump systems
-        :return: self.sys_total_energy, total exergy consumed (electricity + fossils) for heating and cooling
-        :return: self.heating_energy, total exergy consumed (electricity + fossils) for heating
-        :return: self.cooling_energy, total exergy consumed (electricity + fossils) for cooling
-        :return: self.cop, Coefficient of Performance of the heating or cooling system
-        :rtype: float
-
+        Calculates the heating and cooling consumption of a building for a set timestep.
         """
-        # Main File
-
-        # check demand, and change state of self.has_heating_demand, and self._has_cooling_demand
-        self.has_demand(internal_gains, solar_gains, t_out, t_m_prev)
-        has_heating = self.has_heating_demand
-        has_cooling = self.has_cooling_demand
-
-        if not has_heating and not has_cooling:
-            # no heating or cooling demand
-
-            # calculate temperatures of building R-C-model and exit
-            # --> rc_model_function_1(...)
-            self.energy_demand = 0
-
-            self.heating_demand = 0  # Energy required by the zone
-            self.cooling_demand = 0  # Energy surplus of the zone
-            # Energy (in electricity) required by the supply system to provide
-            # HeatingDemand
-            self.heating_sys_electricity = 0
-            # Energy (in fossil fuel) required by the supply system to provide
-            # HeatingDemand
-            self.heating_sys_fossils = 0
-            # Energy (in electricity) required by the supply system to get rid
-            # of CoolingDemand
-            self.cooling_sys_electricity = 0
-            # Energy (in fossil fuel) required by the supply system to get rid
-            # of CoolingDemand
-            self.cooling_sys_fossils = 0
-            # Electricity produced by the supply system (e.g. CHP)
-            self.electricity_out = 0
-            # Set COP to nan if no heating or cooling is required
-            self.cop = float("nan")
-
-        else:
-            # has heating/cooling demand
-
-            # Calculates energy_demand used below
-            self.calc_energy_demand(internal_gains, solar_gains, t_out, t_m_prev)
-            # calculates the actual t_m resulting from the actual heating
-            # demand (energy_demand)
-
-            # Calculate the Heating/Cooling Input Energy Required
-
-            supply_director = (
-                SupplyDirector()
-            )  # Initialise Heating System Manager
-
-            if has_heating:
-                my_system = self.supply_mapping[self.heating_supply_system](
-                    load=self.energy_demand,
-                    t_out=t_out,
-                    heating_supply_temperature=self.heating_supply_temperature,
-                    cooling_supply_temperature=self.cooling_supply_temperature,
-                    has_heating_demand=has_heating,
-                    has_cooling_demand=has_cooling,
-                )
-                supply_director.set_builder(my_system)
-                supplyOut = supply_director.calc_system()
-                # All Variables explained underneath line 467
-                self.heating_demand = self.energy_demand
-                self.heating_sys_electricity = supplyOut.electricity_in
-                self.heating_sys_fossils = supplyOut.fossils_in
-                self.cooling_demand = 0
-                self.cooling_sys_electricity = 0
-                self.cooling_sys_fossils = 0
-                self.electricity_out = supplyOut.electricity_out
-
-            elif has_cooling:
-                my_system = self.supply_mapping[self.cooling_supply_system](
-                    load=self.energy_demand * (-1),
-                    t_out=t_out,
-                    heating_supply_temperature=self.heating_supply_temperature,
-                    cooling_supply_temperature=self.cooling_supply_temperature,
-                    has_heating_demand=has_heating,
-                    has_cooling_demand=has_cooling,
-                )
-                supply_director.set_builder(my_system)
-                supplyOut = supply_director.calc_system()
-                self.heating_demand = 0
-                self.heating_sys_electricity = 0
-                self.heating_sys_fossils = 0
-                self.cooling_demand = self.energy_demand
-                self.cooling_sys_electricity = supplyOut.electricity_in
-                self.cooling_sys_fossils = supplyOut.fossils_in
-                self.electricity_out = supplyOut.electricity_out
-
-            self.cop = supplyOut.cop
-
-        self.sys_total_energy = (
-                self.heating_sys_electricity
-                + self.heating_sys_fossils
-                + self.cooling_sys_electricity
-                + self.cooling_sys_fossils
+        return _solve_building_energy(
+            self, internal_gains, solar_gains, t_out, t_m_prev
         )
-        self.heating_energy = self.heating_sys_electricity + self.heating_sys_fossils
-        self.cooling_energy = self.cooling_sys_electricity + self.cooling_sys_fossils
 
-    # TODO: rename. this is expected to return a boolean. instead, it changes state??? you don't want to change state...
-    # why not just return has_heating_demand and has_cooling_demand?? then call the function "check_demand"
-    # has_heating_demand, has_cooling_demand = self.check_demand(...)
     def has_demand(self, internal_gains, solar_gains, t_out, t_m_prev):
         """
-        Determines whether the building requires heating or cooling
-        Used in: solve_building_energy()
-
-        # step 1 in section C.4.2 in [C.3 ISO 13790]
+        Determines whether the building requires heating or cooling.
         """
-
-        # set energy demand to 0 and see if temperatures are within the comfort
-        # range
-        energy_demand = 0
-        # Solve for the internal temperature t_Air
-        self.calc_temperatures_crank_nicolson(
-            energy_demand, internal_gains, solar_gains, t_out, t_m_prev
-        )
-
-        # If the air temperature is less or greater than the set temperature,
-        # there is a heating/cooling load
-        t_air_rounded = round(self.t_air, 1)
-        if t_air_rounded < self.t_set_heating:
-            self.has_heating_demand = True
-            self.has_cooling_demand = False
-        elif t_air_rounded > self.t_set_cooling:
-            self.has_cooling_demand = True
-            self.has_heating_demand = False
-        else:
-            self.has_heating_demand = False
-            self.has_cooling_demand = False
+        return _has_demand(self, internal_gains, solar_gains, t_out, t_m_prev)
 
     def calc_temperatures_crank_nicolson(
             self, energy_demand, internal_gains, solar_gains, t_out, t_m_prev
@@ -855,147 +464,30 @@ class Building(object):
 
     def calc_energy_demand(self, internal_gains, solar_gains, t_out, t_m_prev):
         """
-        Calculates the energy demand of the space if heating/cooling is active
-        Used in: solve_building_energy()
-        # Step 1 - Step 4 in Section C.4.2 in [C.3 ISO 13790]
+        Calculates the energy demand of the space if heating/cooling is active.
         """
-        # Step 1: Check if heating or cooling is needed
-        # (Not needed, but doing so for readability when comparing with the standard)
-        # Set heating/cooling to 0
-        energy_demand_0 = 0
-        # Calculate the air temperature with no heating/cooling
-        t_air_0 = self.calc_temperatures_crank_nicolson(
-            energy_demand_0, internal_gains, solar_gains, t_out, t_m_prev
-        )[1]
-        # Step 2: Calculate the unrestricted heating/cooling required
-
-        # determine if we need heating or cooling based based on the condition
-        # that no heating or cooling is required
-        if self.has_heating_demand:
-            t_air_set = self.t_set_heating
-        elif self.has_cooling_demand:
-            t_air_set = self.t_set_cooling
-        else:
-            raise NameError(
-                "heating function has been called even though no heating is required"
-            )
-
-        # Set a heating case where the heating load is 10x the energy_ref_area (10
-        # W/m2)
-        energy_floorAx10 = self._energy_floor_ax10
-
-        # Calculate the air temperature obtained by having this 10 W/m2
-        # setpoint
-        t_air_10 = self.calc_temperatures_crank_nicolson(
-            energy_floorAx10, internal_gains, solar_gains, t_out, t_m_prev
-        )[1]
-
-        # Determine the unrestricted heating/cooling of the building
-        self.calc_energy_demand_unrestricted(
-            energy_floorAx10, t_air_set, t_air_0, t_air_10
-        )
-
-        # Step 3: Check if available heating or cooling power is sufficient
-        # If max_cooling_energy_per_floor_area is set so -inf and
-        # max_heating_energy_per_floor_area to inf, this condition is always true
-        if (
-                self.max_cooling_energy
-                <= self.energy_demand_unrestricted
-                <= self.max_heating_energy
-        ):
-            self.energy_demand = self.energy_demand_unrestricted
-            self.t_air_ac = (
-                t_air_set  # not sure what this is used for at this stage TODO
-            )
-
-        # Step 4: if not sufficient then set the heating/cooling setting to the
-        # maximum
-        # necessary heating power exceeds maximum available power
-        elif self.energy_demand_unrestricted > self.max_heating_energy:
-            self.energy_demand = self.max_heating_energy
-
-        # necessary cooling power exceeds maximum available power
-        elif self.energy_demand_unrestricted < self.max_cooling_energy:
-            self.energy_demand = self.max_cooling_energy
-
-        else:
-            self.energy_demand = 0
-            raise ValueError("unknown radiative heating/cooling system status")
-
-        # calculate system temperatures for Step 3/Step 4
-        self.calc_temperatures_crank_nicolson(
-            self.energy_demand, internal_gains, solar_gains, t_out, t_m_prev
+        return _calc_energy_demand(
+            self, internal_gains, solar_gains, t_out, t_m_prev
         )
 
     def calc_energy_demand_unrestricted(
             self, energy_floorAx10, t_air_set, t_air_0, t_air_10
     ):
         """
-        Calculates the energy demand of the system if it has no maximum output restrictions
-        # (C.13) in [C.3 ISO 13790]
-
-
-        Based on the Thales Intercept Theorem.
-        Where we set a heating case that is 10x the floor area and determine the temperature as a result
-        Assuming that the relation is linear, one can draw a right angle triangle.
-        From this we can determine the heating level required to achieve the set point temperature
-        This assumes a perfect HVAC control system
+        Calculates unrestricted heating/cooling demand.
         """
-        self.energy_demand_unrestricted = (
-                energy_floorAx10 * (t_air_set - t_air_0) / (t_air_10 - t_air_0)
+        return _calc_energy_demand_unrestricted(
+            self, energy_floorAx10, t_air_set, t_air_0, t_air_10
         )
-
     def calc_heat_flow(self, t_out, internal_gains, solar_gains, energy_demand):
         """
-        Calculates the heat flow from the solar gains, heating/cooling system, and internal gains into the building
-
-        The input of the building is split into the air node, surface node, and thermal mass node based on
-        on the following equations
-
-        #C.1 - C.3 in [C.3 ISO 13790]
-
-        Note that this equation has diverged slightly from the standard
-        as the heating/cooling node can enter any node depending on the
-        emission system selected
+        Calculates heat flow from solar gains, internal gains and heating/cooling emission.
         """
-
-        # Calculates the heat flows to various points of the building based on the breakdown in section C.2, formulas C.1-C.3
-        # Heat flow to the air node
-        self.phi_ia = 0.5 * internal_gains
-        # Heat flow to the surface node
-        self.phi_st = (
-                              1 - (self.mass_area / self.A_t) - (self.h_tr_w / (9.1 * self.A_t))
-                      ) * (0.5 * internal_gains + solar_gains)
-        # Heatflow to the thermal mass node
-        self.phi_m = (self.mass_area / self.A_t) * (0.5 * internal_gains + solar_gains)
-
-        # We call the EmissionDirector to modify these flows depending on the
-        # system and the energy demand
-        emDirector = EmissionDirector()
-
-        # Set the emission system to the type specified by the user
-        if energy_demand > 0:
-            my_system = self.class_mapping[self.heating_emission_system](energy_demand)
-            emDirector.set_builder(my_system)
-            # emDirector.set_builder(self.heating_emission_system(
-            #     energy_demand=energy_demand))
-        else:
-            my_system = self.class_mapping[self.cooling_emission_system](energy_demand)
-            emDirector.set_builder(my_system)
-            # emDirector.set_builder(self.cooling_emission_system(
-            #     energy_demand=energy_demand))
-        # Calculate the new flows to each node based on the heating/cooling system
-        flows = emDirector.calc_flows()
-        # Set modified flows to building object
-
-        self.phi_ia += flows.phi_ia_plus
-        self.phi_st += flows.phi_st_plus
-        self.phi_m += flows.phi_m_plus
-
-        # Set supply temperature to building object
-        self.heating_supply_temperature = flows.heating_supply_temperature
-        self.cooling_supply_temperature = flows.cooling_supply_temperature
-
+        return _calc_heat_flow(
+            self, t_out, internal_gains, solar_gains, energy_demand
+        )
+    # Legacy thermal formula helpers retained for compatibility. The active
+    # hourly path in calc_temperatures_crank_nicolson uses inline thermal math.
     def calc_t_m_next(self, t_m_prev):
         """
         Primary Equation, calculates the temperature of the next time step

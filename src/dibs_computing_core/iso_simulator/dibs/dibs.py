@@ -7,16 +7,72 @@ from dibs_computing_core.iso_simulator.model.hours_result import Result
 from dibs_computing_core.iso_simulator.model.ResultOutput import ResultOutput
 from dibs_computing_core.iso_simulator.model.summary_result import SummaryResult
 from dibs_computing_core.iso_simulator.model.building import Building
+from dibs_computing_core.iso_simulator.exceptions import DIBSDataSourceError, DIBSError
 import time
 import multiprocessing
 import logging
+import os
+from copy import copy
 from time import perf_counter
-from typing import List
 
 from .dibs_utils.dibs_auxiliary_functions import extracted_method_to_simulate_one_building, unpack_results
 
 
 logger = logging.getLogger(__name__)
+
+PERF_LOG_TRUE_VALUES = {"1", "true", "yes", "on"}
+
+
+def _perf_logging_enabled() -> bool:
+    """Return whether structured SIM_PERF logs should be emitted."""
+    return os.getenv("DIBS_PERF_LOG", "").lower() in PERF_LOG_TRUE_VALUES
+
+
+def _log_perf(phase: str, duration_s: float) -> None:
+    """Emit a structured performance log only when explicitly enabled."""
+    if _perf_logging_enabled():
+        logger.info("SIM_PERF dibs phase=%s duration_s=%.4f", phase, duration_s)
+
+
+def _add_worker_error_context(
+    error: DIBSError, building: Building, phase: str
+) -> None:
+    if error.phase is None:
+        error.phase = phase
+    error.context.setdefault(
+        "building_id", getattr(building, "scr_gebaeude_id", None)
+    )
+
+
+def _simulate_building_worker(
+    datasource: DataSource, building: Building
+) -> tuple[Result, ResultOutput]:
+    """Simulate one building with an isolated DataSource copy."""
+    datasource.building = building
+    try:
+        datasource.get_epw_file()
+    except DIBSError as error:
+        _add_worker_error_context(error, building, "initialize_data")
+        raise
+
+    try:
+        simulator = BuildingSimulator(datasource)
+    except DIBSError as error:
+        _add_worker_error_context(error, building, "simulator_init")
+        raise
+
+    try:
+        return extracted_method_to_simulate_one_building(
+            simulator, building.t_set_heating
+        )
+    except DIBSError as error:
+        _add_worker_error_context(error, building, "simulate_hours")
+        raise
+
+
+def _pool_size(task_count: int) -> int:
+    """Avoid starting more worker processes than there are building tasks."""
+    return min(task_count, multiprocessing.cpu_count() or 1)
 
 
 class DIBS:
@@ -31,43 +87,77 @@ class DIBS:
     def set_data_source(self, datasource: DataSource):
         self.datasource = datasource
 
+    @staticmethod
+    def _run_with_error_phase(phase: str, operation, *args):
+        """Run one phase and enrich expected DIBS errors with its name."""
+        try:
+            return operation(*args)
+        except DIBSError as error:
+            if error.phase is None:
+                error.phase = phase
+            raise
+
     def calculate_result_of_one_building(self) -> tuple[float, Result, SummaryResult]:
-        """
-        This method simulates the building which located in the given path
-        Args:
+        """Simulate one building and propagate expected DIBS failures."""
+        perf_logging = _perf_logging_enabled()
+        total_started = perf_counter() if perf_logging else None
 
-        Returns:
+        user_args = self._run_with_error_phase(
+            "initialize_data", self.get_user_args
+        )
 
-        """
-        total_started = perf_counter()
+        started = perf_counter() if perf_logging else None
+        self._run_with_error_phase("initialize_data", self.initialize_data)
+        self._validate_datasource_state()
+        if perf_logging:
+            _log_perf("initialize_data", perf_counter() - started)
 
-        user_args = self.get_user_args()
-
-        started = perf_counter()
-        self.initialize_data()
-        logger.info("SIM_PERF dibs phase=initialize_data duration_s=%.4f", perf_counter() - started)
-
-        started = perf_counter()
-        simulator = BuildingSimulator(self.datasource)
-        logger.info("SIM_PERF dibs phase=simulator_init duration_s=%.4f", perf_counter() - started)
+        started = perf_counter() if perf_logging else None
+        simulator = self._run_with_error_phase(
+            "simulator_init", BuildingSimulator, self.datasource
+        )
+        if perf_logging:
+            _log_perf("simulator_init", perf_counter() - started)
 
         t_set_heating_temp = simulator.datasource.building.t_set_heating
         started = perf_counter()
-        result, result_output = extracted_method_to_simulate_one_building(
-            simulator, t_set_heating_temp)
+        result, result_output = self._run_with_error_phase(
+            "simulate_hours",
+            extracted_method_to_simulate_one_building,
+            simulator,
+            t_set_heating_temp,
+        )
         simulation_time = perf_counter() - started
-        logger.info("SIM_PERF dibs phase=simulate_hours duration_s=%.4f", simulation_time)
+        if perf_logging:
+            _log_perf("simulate_hours", simulation_time)
 
-        started = perf_counter()
-        summary_result = SummaryResult(result_output, user_args)
-        logger.info("SIM_PERF dibs phase=summary_wrap duration_s=%.4f", perf_counter() - started)
-        logger.info("SIM_PERF dibs phase=total duration_s=%.4f", perf_counter() - total_started)
+        started = perf_counter() if perf_logging else None
+        summary_result = self._run_with_error_phase(
+            "summary_wrap", SummaryResult, result_output, user_args
+        )
+        if perf_logging:
+            _log_perf("summary_wrap", perf_counter() - started)
+            _log_perf("total", perf_counter() - total_started)
         return simulation_time, result, summary_result
-
     def initialize_data(self):
         self.datasource.get_user_building()
         self.datasource.get_epw_pe_factors()
         self.datasource.get_epw_file()
+
+    def _validate_datasource_state(self) -> None:
+        """Ensure that stateful DataSource initialization produced all inputs."""
+        required_fields = ("building", "epw_file", "epw_pe_factors")
+        missing_fields = [
+            field
+            for field in required_fields
+            if getattr(self.datasource, field, None) is None
+        ]
+        if missing_fields:
+            raise DIBSDataSourceError(
+                "DataSource initialization is incomplete",
+                phase="initialize_data",
+                context={"missing_fields": missing_fields},
+            )
 
     def get_user_args(self):
         return [self.datasource.profile_from_norm,
@@ -101,7 +191,14 @@ class DIBS:
 
         return result, result_output
 
-    def multi(self) -> tuple[float, Result: List[Result], List[SummaryResult]]:
+    def _worker_datasource_copy(self) -> DataSource:
+        """Copy shared configuration without retaining the full building stock."""
+        datasource = copy(self.datasource)
+        datasource.building = None
+        datasource.buildings = None
+        return datasource
+
+    def multi(self) -> tuple[float, list[Result], list[SummaryResult]]:
         """
         Simulates all buildings parallel using multiprocessing.Pool()
         Parameters
@@ -112,24 +209,22 @@ class DIBS:
         user_args = self.get_user_args()
         self.datasource.get_user_buildings()
         self.datasource.get_epw_pe_factors()
+        if not self.datasource.buildings:
+            return 0.0, [], []
 
-        with multiprocessing.Pool() as pool:
-            results = []
-            begin = time.time()
-
-            for index, building in enumerate(self.datasource.buildings):
-                result = pool.apply_async(
-                    self.calculate_result_of_all_buildings,
-                    (self.datasource.buildings, index)
+        begin = time.time()
+        worker_datasource = self._worker_datasource_copy()
+        with multiprocessing.Pool(
+            processes=_pool_size(len(self.datasource.buildings))
+        ) as pool:
+            async_results = [
+                pool.apply_async(
+                    _simulate_building_worker, (worker_datasource, building)
                 )
-                results.append(result)
-
-            pool.close()
-            pool.join()
-
-            results = [result.get() for result in results]
-            end = time.time()
-            simulation_time = end - begin
+                for building in self.datasource.buildings
+            ]
+            results = [result.get() for result in async_results]
+            simulation_time = time.time() - begin
 
             result, result_output = unpack_results(results)
 
@@ -137,8 +232,9 @@ class DIBS:
 
         return simulation_time, result, summary_results
 
-    def multi_with_batches(self, user_args, buildings, start, end, batch_results) -> tuple[float, Result: List[Result],
-                                                                                     List[SummaryResult]]:
+    def multi_with_batches(
+        self, user_args, buildings, start, end, batch_results=None
+    ) -> tuple[float, list[Result], list[SummaryResult]]:
         """
         Simulates all buildings parallel using multiprocessing.Pool()
         Parameters
@@ -147,23 +243,23 @@ class DIBS:
             (simulation_time, results_all_hours, summary_results)
         """
 
-        results = []
+        selected_buildings = buildings[start:end]
+        if not selected_buildings:
+            return 0.0, [], []
+
         begin = time.time()
-        print(f'Gebäude von {start} bis {end} wird berechnet')
-        with multiprocessing.Pool() as pool:
-            for index in range(start, end):
-                result = pool.apply_async(
-                    self.calculate_result_of_all_buildings,
-                    (buildings, index)
+        worker_datasource = self._worker_datasource_copy()
+        with multiprocessing.Pool(
+            processes=_pool_size(len(selected_buildings))
+        ) as pool:
+            async_results = [
+                pool.apply_async(
+                    _simulate_building_worker, (worker_datasource, building)
                 )
-                batch_results.append(result)
-
-            pool.close()
-            pool.join()
-
-            results = [result.get() for result in batch_results]
-            end = time.time()
-            simulation_time = end - begin
+                for building in selected_buildings
+            ]
+            results = [result.get() for result in async_results]
+            simulation_time = time.time() - begin
 
             result, result_output = unpack_results(results)
 

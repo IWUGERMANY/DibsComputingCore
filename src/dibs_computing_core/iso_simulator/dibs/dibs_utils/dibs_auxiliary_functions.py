@@ -1,6 +1,13 @@
 from dibs_computing_core.iso_simulator.building_simulator.simulator import BuildingSimulator
 from dibs_computing_core.iso_simulator.model.hours_result import Result
 from dibs_computing_core.iso_simulator.model.ResultOutput import ResultOutput
+from dibs_computing_core.iso_simulator.building_simulator.system_enums import (
+    EnergyCarrier,
+    system_key,
+)
+from dibs_computing_core.iso_simulator.building_simulator.system_fuel_mappings import (
+    DHW_NO_SYSTEM_TYPES,
+)
 import os
 
 
@@ -141,7 +148,7 @@ def extracted_method_to_simulate_one_building(simulator: BuildingSimulator, t_se
     window_east = all_windows[1]
     window_west = all_windows[2]
     window_north = all_windows[3]
-    has_dhw = building.dhw_system not in ["NoDHW", " -"]
+    has_dhw = system_key(building.dhw_system) not in DHW_NO_SYSTEM_TYPES
     central_heating_or_dhw = simulator.check_if_central_heating_or_central_dhw()
     heat_pump_air_or_ground = simulator.check_if_heat_pump_air_or_ground_source()
 
@@ -157,9 +164,11 @@ def extracted_method_to_simulate_one_building(simulator: BuildingSimulator, t_se
             building.h_ve_adj = calc_h_ve_adj(hour, t_out, usage_start, usage_end)
             t_air = set_t_air_based_on_hour(hour)
 
-            solar_gains_all_windows, transmitted_illuminance_sum = calc_window_gains_and_illuminance(
+            window_gains = calc_window_gains_and_illuminance(
                 altitude, azimuth, t_air, hour, people > 0
             )
+            solar_gains_all_windows = window_gains.solar_gains_total
+            transmitted_illuminance_sum = window_gains.transmitted_illuminance_total
             solve_building_lighting(transmitted_illuminance_sum, people)
 
             appliance_gains_demand = appliance_gains_area_factor * appliances
@@ -230,9 +239,11 @@ def extracted_method_to_simulate_one_building(simulator: BuildingSimulator, t_se
             building.h_ve_adj = calc_h_ve_adj(hour, t_out, usage_start, usage_end)
             t_air = set_t_air_based_on_hour(hour)
 
-            solar_gains_all_windows, transmitted_illuminance_sum = calc_window_gains_and_illuminance(
+            window_gains = calc_window_gains_and_illuminance(
                 altitude, azimuth, t_air, hour, people > 0
             )
+            solar_gains_all_windows = window_gains.solar_gains_total
+            transmitted_illuminance_sum = window_gains.transmitted_illuminance_total
             solve_building_lighting(transmitted_illuminance_sum, people)
 
             appliance_gains_demand = appliance_gains_area_factor * appliances
@@ -338,8 +349,6 @@ def extracted_method_to_simulate_one_building(simulator: BuildingSimulator, t_se
     f_ghg, f_pe, f_hs_hi, fuel_type = simulator.get_ghg_pe_conversion_factors(
         fuel_type
     )
-    # if type(f_hs_hi) is type(None):
-    #     print(f'bd_id: {simulator.datasource.building.scr_gebaeude_id} and f_hs_hi: {f_hs_hi}')
     (
         heating_sys_electricity_hi_sum,
         heating_sys_carbon_sum,
@@ -348,7 +357,7 @@ def extracted_method_to_simulate_one_building(simulator: BuildingSimulator, t_se
     ) = simulator.check_heating_sys_electricity_sum(
         sum_of_all_results, f_hs_hi, f_ghg, f_pe
     )
-    heating_sys_hi_sum = simulator.sys_electricity_folssils_sum(
+    heating_sys_hi_sum = simulator.sys_electricity_fossils_sum(
         heating_sys_electricity_hi_sum, heating_sys_fossils_hi_sum
     )
     heating_fuel_type = fuel_type
@@ -374,7 +383,7 @@ def extracted_method_to_simulate_one_building(simulator: BuildingSimulator, t_se
     ) = simulator.check_hotwater_sys_electricity_sum(
         sum_of_all_results, f_hs_hi, f_ghg, f_pe
     )
-    hot_water_energy_hi_sum = simulator.sys_electricity_folssils_sum(
+    hot_water_energy_hi_sum = simulator.sys_electricity_fossils_sum(
         hot_water_sys_electricity_hi_sum, hot_water_sys_fossils_hi_sum
     )
     hot_water_fuel_type = fuel_type
@@ -393,7 +402,7 @@ def extracted_method_to_simulate_one_building(simulator: BuildingSimulator, t_se
         cooling_sys_carbon_sum,
         cooling_sys_pe_sum,
         cooling_sys_fossils_hi_sum,
-    ) = simulator.check_cooling_system_elctricity_sum(
+    ) = simulator.check_cooling_system_electricity_sum(
         sum_of_all_results, f_hs_hi, f_ghg, f_pe
     )
     cooling_sys_hi_sum = simulator.cooling_sys_hi_sum(
@@ -408,7 +417,7 @@ def extracted_method_to_simulate_one_building(simulator: BuildingSimulator, t_se
         Lighting
         electrical energy for lighting
         """
-    fuel_type = "Electricity grid mix"
+    fuel_type = EnergyCarrier.ELECTRICITY_GRID_MIX.value
     f_ghg, f_pe, f_hs_hi, fuel_type = simulator.get_ghg_pe_conversion_factors(
         fuel_type
     )

@@ -1,5 +1,7 @@
-class PLZNotFoundError(Exception):
-    """Raised when zipcode not found"""
+from .base import DIBSDataSourceError
 
-    def __int__(self):
-        self.value = "Zipcode not found"
+
+class PLZNotFoundError(DIBSDataSourceError):
+    """Raised when a postcode cannot be resolved."""
+
+    code = "DIBS_POSTCODE_NOT_FOUND"

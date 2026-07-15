@@ -1,5 +1,7 @@
-class BuildingNotHeatedError(Exception):
-    """Raised when the building not heated"""
+from .base import DIBSConfigurationError
 
-    def __int__(self, value: str):
-        self.value = value
+
+class BuildingNotHeatedError(DIBSConfigurationError):
+    """Raised when a building cannot be simulated as heated."""
+
+    code = "DIBS_BUILDING_NOT_HEATED"

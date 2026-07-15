@@ -1,5 +1,7 @@
-class GHGEmissionError(Exception):
-    """Raised when an error occured during calculation of GHG-Emission for Heating. The following heating_supply_system cannot be considered yet"""
+from .base import DIBSResultError
 
-    def __int__(self, value: str):
-        self.value = value
+
+class GHGEmissionError(DIBSResultError):
+    """Raised when GHG emissions cannot be calculated."""
+
+    code = "DIBS_GHG_CALCULATION_FAILED"

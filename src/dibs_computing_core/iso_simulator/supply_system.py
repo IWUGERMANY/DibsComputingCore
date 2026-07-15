@@ -19,6 +19,8 @@ __author__ = "Simon Knoll, Julian Bischof, Michael Hörner "
 __copyright__ = "Copyright 2022, Institut Wohnen und Umwelt"
 __license__ = "MIT"
 
+from .exceptions import SimulationStateError
+
 
 class SupplyDirector:
     """
@@ -621,8 +623,13 @@ class HeatPumpAirSource(SupplySystemBase):
             system.electricity_in = self.load / system.cop
 
         else:
-            raise ValueError(
-                "HeatPumpAir called although there is no heating/cooling demand"
+            raise SimulationStateError(
+                "HeatPumpAir called without heating or cooling demand",
+                phase="simulate_hours",
+                context={
+                    "has_heating_demand": self.has_heating_demand,
+                    "has_cooling_demand": self.has_cooling_demand,
+                },
             )
 
         system.fossils_in = 0

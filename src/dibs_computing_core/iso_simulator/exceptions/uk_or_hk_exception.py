@@ -1,5 +1,7 @@
-class HkOrUkNotFoundError(Exception):
-    """Raised when hk_geb or uk_geb not found in the dataframe"""
+from .base import DIBSDataSourceError
 
-    def __int__(self, value: str):
-        self.value = value
+
+class HkOrUkNotFoundError(DIBSDataSourceError):
+    """Raised when an HK/UK usage type cannot be resolved."""
+
+    code = "DIBS_USAGE_TYPE_NOT_FOUND"

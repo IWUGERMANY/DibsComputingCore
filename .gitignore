@@ -8,3 +8,6 @@ venv/
 env/
 
 .**/
+# Generated local benchmark/regression outputs
+performance_results/
+regression_results/

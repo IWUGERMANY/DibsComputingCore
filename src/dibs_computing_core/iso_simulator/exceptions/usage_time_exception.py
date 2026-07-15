@@ -1,5 +1,7 @@
-class UsageTimeError(Exception):
-    """Raised when something went wrong with the function getUsagetime()"""
+from .base import DIBSDataSourceError
 
-    def __init__(self, value: str):
-        self.value = value
+
+class UsageTimeError(DIBSDataSourceError):
+    """Raised when usage times cannot be resolved."""
+
+    code = "DIBS_USAGE_TIME_NOT_FOUND"
